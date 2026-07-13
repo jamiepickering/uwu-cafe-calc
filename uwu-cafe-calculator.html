@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UwU Cafe · Order & Ingredient Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --milk:#FFF6F0;
+    --paper:#FFFFFF;
+    --ink:#4A2C35;
+    --ink-soft:#8A6470;
+    --pink:#F9A8C0;
+    --pink-deep:#E86A96;
+    --pink-wash:#FDE4EC;
+    --matcha:#9CC08B;
+    --matcha-deep:#5E8A4E;
+    --gold:#C9962E;
+    --line:#F3D7E0;
+    --shadow:0 6px 18px rgba(232,106,150,.14);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Quicksand',sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, #FFE9F1 0, transparent 30%),
+      radial-gradient(circle at 88% 90%, #F0F7EA 0, transparent 32%),
+      var(--milk);
+    color:var(--ink);
+    min-height:100vh;
+    padding:28px clamp(14px,4vw,48px) 80px;
+  }
+  header{max-width:1180px;margin:0 auto 22px}
+  .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .cat-badge{
+    width:58px;height:58px;border-radius:50%;
+    background:var(--pink-wash);
+    display:grid;place-items:center;font-size:30px;
+    border:2px dashed var(--pink);
+    animation:bob 3.5s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
+  @media (prefers-reduced-motion:reduce){.cat-badge{animation:none}}
+  h1{
+    font-family:'Baloo 2',cursive;font-weight:800;
+    font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.05;letter-spacing:.5px;
+  }
+  h1 .uwu{color:var(--pink-deep)}
+  .tagline{color:var(--ink-soft);font-weight:600;font-size:.95rem;margin-top:2px}
+
+  .toolbar{
+    max-width:1180px;margin:0 auto 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  }
+  .toolbar .hint{font-size:.8rem;color:var(--ink-soft);font-weight:600}
+  .toggle{
+    border:1.5px solid var(--line);background:#fff;color:var(--pink-deep);
+    font:700 .82rem 'Quicksand',sans-serif;border-radius:99px;padding:8px 16px;cursor:pointer;
+    transition:background .15s;
+  }
+  .toggle:hover{background:var(--pink-wash)}
+  .toggle.on{background:var(--pink-deep);border-color:var(--pink-deep);color:#fff}
+  .toggle:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
+
+  .layout{
+    max-width:1180px;margin:0 auto;
+    display:grid;grid-template-columns:1fr 350px;gap:26px;align-items:start;
+  }
+  @media(max-width:900px){.layout{grid-template-columns:1fr}}
+
+  .cat-section{margin-bottom:30px}
+  .cat-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .cat-head h2{font-family:'Baloo 2',cursive;font-weight:700;font-size:1.25rem;letter-spacing:.4px}
+  .cat-head .rule{flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--line),transparent)}
+  .cat-emoji{font-size:1.3rem}
+
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:14px}
+  .card{
+    background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:14px 14px 12px;box-shadow:0 2px 8px rgba(232,106,150,.06);
+    transition:border-color .18s, box-shadow .18s, transform .18s;
+  }
+  .card.active{border-color:var(--pink);box-shadow:var(--shadow);transform:translateY(-2px)}
+  .card.special{border-style:dashed;border-color:#EAD9A8}
+  .card.special.active{border-color:var(--gold)}
+  .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .card h3{font-family:'Baloo 2',cursive;font-weight:700;font-size:1.02rem;line-height:1.2}
+  .price-tag{
+    font:600 .82rem 'IBM Plex Mono',monospace;color:var(--matcha-deep);
+    background:#F0F7EA;border-radius:8px;padding:3px 7px;white-space:nowrap;
+  }
+  .card.special .price-tag{color:var(--gold);background:#FBF3DC}
+  .price-edit{display:none;align-items:center;gap:4px;font:600 .8rem 'IBM Plex Mono',monospace;color:var(--matcha-deep)}
+  body.pricing .price-edit{display:flex}
+  body.pricing .price-tag{display:none}
+  .price-edit input{
+    width:78px;border:1.5px solid var(--matcha);border-radius:8px;padding:4px 6px;
+    font:600 .8rem 'IBM Plex Mono',monospace;color:var(--ink);text-align:right;
+  }
+  .price-edit input:focus{outline:3px solid var(--matcha);outline-offset:1px}
+  .card .ing{color:var(--ink-soft);font-size:.78rem;font-weight:600;margin:6px 0 12px;line-height:1.5}
+  .stepper{display:flex;align-items:center;gap:10px}
+  .stepper button{
+    width:34px;height:34px;border-radius:12px;border:none;cursor:pointer;
+    font-family:'Baloo 2',cursive;font-size:1.25rem;font-weight:700;line-height:1;
+    background:var(--pink-wash);color:var(--pink-deep);
+    transition:background .15s, transform .1s;
+  }
+  .stepper button:hover{background:var(--pink);color:#fff}
+  .stepper button:active{transform:scale(.9)}
+  .stepper button:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
+  .stepper input{
+    width:56px;text-align:center;border:1.5px solid var(--line);border-radius:12px;
+    padding:7px 4px;font:600 1rem 'Quicksand',sans-serif;color:var(--ink);background:#fff;
+  }
+  .stepper input:focus{outline:3px solid var(--pink);outline-offset:1px;border-color:var(--pink)}
+
+  .receipt-wrap{position:sticky;top:20px}
+  @media(max-width:900px){.receipt-wrap{position:static}}
+  .receipt{
+    background:#fff;font-family:'IBM Plex Mono',monospace;border-radius:6px 6px 0 0;
+    box-shadow:0 10px 30px rgba(74,44,53,.15);padding:22px 20px 30px;position:relative;
+  }
+  .receipt::after{
+    content:"";position:absolute;left:0;right:0;bottom:-12px;height:12px;
+    background:
+      linear-gradient(-45deg, transparent 8px, #fff 0) left/16px 12px repeat-x,
+      linear-gradient(45deg, transparent 8px, #fff 0) left/16px 12px repeat-x;
+  }
+  .receipt h2{font-weight:600;font-size:.95rem;text-align:center;letter-spacing:2px;text-transform:uppercase}
+  .receipt .sub{text-align:center;font-size:.68rem;color:var(--ink-soft);letter-spacing:1px;margin-top:3px}
+  .dashes{border:none;border-top:1.5px dashed var(--line);margin:13px 0}
+  .server-row{
+    display:flex;align-items:baseline;gap:8px;margin-top:12px;
+    font-size:.78rem;
+  }
+  .server-row label{color:var(--ink-soft);letter-spacing:1px;text-transform:uppercase;font-size:.68rem}
+  .server-row input{
+    flex:1;border:none;border-bottom:1.5px dashed var(--line);background:transparent;
+    font:600 .82rem 'IBM Plex Mono',monospace;color:var(--pink-deep);
+    padding:2px 2px 4px;min-width:0;
+  }
+  .server-row input::placeholder{color:#D9BAC5;font-weight:400}
+  .server-row input:focus{outline:none;border-bottom-color:var(--pink-deep)}
+  .r-sect{font-size:.66rem;letter-spacing:1.5px;color:var(--ink-soft);margin:2px 0 5px;text-transform:uppercase}
+  .r-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.78rem;padding:3px 0}
+  .r-line .dots{flex:1;border-bottom:1.5px dotted var(--line);transform:translateY(-3px)}
+  .r-line .qty{font-weight:600;color:var(--pink-deep)}
+  .r-line .money{font-weight:600;color:var(--matcha-deep)}
+  .r-note{font-size:.64rem;color:var(--ink-soft);padding-left:2px}
+  .r-empty{text-align:center;color:var(--ink-soft);font-size:.78rem;padding:18px 6px;line-height:1.7}
+  .r-total{display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;letter-spacing:.5px;padding:2px 0}
+  .r-total.grand{font-size:.95rem;color:var(--matcha-deep)}
+  .r-foot{text-align:center;font-size:.68rem;color:var(--ink-soft);margin-top:14px;letter-spacing:1px}
+  .r-actions{display:flex;gap:10px;margin-top:16px}
+  .btn{
+    flex:1;border:none;cursor:pointer;border-radius:12px;padding:10px 8px;
+    font:700 .82rem 'Quicksand',sans-serif;letter-spacing:.4px;
+    transition:transform .1s, opacity .15s;
+  }
+  .btn:active{transform:scale(.96)}
+  .btn:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
+  .btn-copy{background:var(--matcha);color:#fff}
+  .btn-copy:hover{background:var(--matcha-deep)}
+  .btn-clear{background:var(--pink-wash);color:var(--pink-deep)}
+  .btn-clear:hover{background:var(--pink);color:#fff}
+  .webhook-row{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+  .webhook-row input{
+    border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;
+    font:500 .72rem 'IBM Plex Mono',monospace;color:var(--ink);background:#fff;min-width:0;
+  }
+  .webhook-row input:focus{outline:3px solid #A8B6E8;outline-offset:1px;border-color:#8195DE}
+  .btn-discord{background:#5865F2;color:#fff}
+  .btn-discord:hover{background:#4552D9}
+  .btn-discord:disabled{opacity:.6;cursor:wait}
+  .webhook-hint{font-size:.62rem;color:var(--ink-soft);text-align:center;letter-spacing:.3px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="cat-badge" aria-hidden="true">🐱</div>
+    <div>
+      <h1><span class="uwu">UwU Cafe</span> Order Calculator</h1>
+      <p class="tagline">pick the order — get the bill and the shopping list · 1 craft makes 5 items ✧</p>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <button class="toggle" id="priceToggle" type="button">✎ Edit prices</button>
+  <span class="hint">prices loaded from the sheet — menu items $100, specials priced individually</span>
+</div>
+
+<div class="layout">
+  <main id="menu"></main>
+
+  <aside class="receipt-wrap" aria-live="polite">
+    <div class="receipt">
+      <h2>· Order Ticket ·</h2>
+      <p class="sub">UWU CAFE — PREP &amp; BILL</p>
+      <div class="server-row">
+        <label for="serverName">server:</label>
+        <input id="serverName" type="text" maxlength="40" placeholder="who took the order?" autocomplete="off">
+      </div>
+      <hr class="dashes">
+      <div id="orderLines"></div>
+      <div id="orderTotals"></div>
+      <hr class="dashes">
+      <p class="r-sect">Ingredients needed · 1 craft = 5 items</p>
+      <div id="ingLines"></div>
+      <hr class="dashes">
+      <div class="r-total"><span>TOTAL INGREDIENTS</span><span id="totalCount">0</span></div>
+      <div class="r-actions">
+        <button class="btn btn-copy" id="copyBtn" type="button">Copy ticket</button>
+        <button class="btn btn-clear" id="clearBtn" type="button">Clear all</button>
+      </div>
+      <div class="webhook-row">
+        <input id="webhookUrl" type="url" placeholder="paste Discord webhook URL…" autocomplete="off" spellcheck="false" aria-label="Discord webhook URL">
+        <button class="btn btn-discord" id="discordBtn" type="button">Send ticket to Discord</button>
+        <p class="webhook-hint" id="webhookHint">the URL stays in your browser — it's never saved in this file</p>
+      </div>
+      <p class="r-foot">≽^•⩊•^≼ arigatou for cooking!</p>
+    </div>
+  </aside>
+</div>
+
+<script>
+const YIELD = 5; // one craft uses 1 of each ingredient and makes 5 finished items
+
+// { name: { price, ings } } — ings: [] means a special item, sold as-is (no crafting)
+const MENU = {
+  "Drinks 🧋": {
+    "Matcha Coffee":        { price:100, ings:["matcha powder","milk","brewed coffee"] },
+    "Lovely Hot Chocolate": { price:100, ings:["sugar","cocoa powder","milk","cup"] },
+    "Hot Chocolate":        { price:100, ings:["sugar","cocoa powder","milk","cup"] },
+    "Booba Milk Tea":       { price:100, ings:["dried boba tapioca pearls","sugar","milk","juice","ice"] },
+    "Sweet Herbal Tea":     { price:100, ings:["lemon","sugar","mint","ice","cup"] }
+  },
+  "Mains 🍛": {
+    "Kira Kira Curry":    { price:100, ings:["onion","rice","chicken thighs","plate"] },
+    "Sugoi Katsu Sando":  { price:100, ings:["pullman bread","chicken breast","egg","flour","butter","plate"] },
+    "Om-Nom Omurice":     { price:100, ings:["onion","chicken thighs","virgin olive oil","rice","soy sauce","plate"] },
+    "Rice Balls":         { price:100, ings:["rice","sea moss"] },
+    "Doki Doki Pancakes": { price:100, ings:["flour","milk","egg"] }
+  },
+  "Sweets 🍪": {
+    "Brown Macaroon":       { price:100, ings:["flour","egg","sugar","brown dye"] },
+    "Pink Macaroon":        { price:100, ings:["flour","egg","sugar","pink dye"] },
+    "Green Macaroon":       { price:100, ings:["flour","egg","sugar","green dye"] },
+    "Turquoise Macaroon":   { price:100, ings:["flour","egg","sugar","turquoise dye"] },
+    "Awwdorable Chocolate": { price:100, ings:["sugar","cocoa powder","milk"] },
+    "GingerKitty Cookie":   { price:100, ings:["egg","lemon","baking powder"] }
+  },
+  "Desserts 🍰": {
+    "Blueberry Cupcake":       { price:100, ings:["baking powder","egg","sugar","butter","flour"] },
+    "Dragon's Fire Cupcake":   { price:100, ings:["milk","egg","butter"] },
+    "Purrfect Parfait":        { price:100, ings:["milk","strawberry","butter","egg"] },
+    "Meowchi Mochi Ice Cream": { price:100, ings:["rice flour","sugar"] },
+    "Birthday Cake":           { price:100, ings:["sugar","flour","egg","milk","plate"] },
+    "Strawberry Shortcake":    { price:100, ings:["flour","baking powder","strawberry","sugar","butter","plate"] }
+  },
+  "Specials 🎁": {
+    "Purrfect Feast / Pawsitively Breakfast": { price:300,   ings:[] },
+    "Mystery Box":                            { price:5000,  ings:[] },
+    "Chef's Meal (Date Night)":               { price:6000,  ings:[] },
+    "Plushie":                                { price:20000, ings:[] }
+  }
+};
+
+const qty = {}, price = {}, ITEMS = {};
+for (const items of Object.values(MENU))
+  for (const [item, def] of Object.entries(items)) { qty[item] = 0; price[item] = def.price; ITEMS[item] = def; }
+
+const menuEl = document.getElementById('menu');
+const money = n => "$" + n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const isSpecial = item => ITEMS[item].ings.length === 0;
+const craftsFor = item => isSpecial(item) ? 0 : Math.ceil(qty[item] / YIELD);
+
+for (const [cat, items] of Object.entries(MENU)) {
+  const parts = cat.split(' ');
+  const emoji = parts.pop();
+  const name = parts.join(' ');
+  const section = document.createElement('section');
+  section.className = 'cat-section';
+  section.innerHTML = `
+    <div class="cat-head">
+      <span class="cat-emoji" aria-hidden="true">${emoji}</span>
+      <h2>${name}</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="menu-grid"></div>`;
+  const grid = section.querySelector('.menu-grid');
+
+  for (const [item, def] of Object.entries(items)) {
+    const card = document.createElement('div');
+    card.className = 'card' + (def.ings.length ? '' : ' special');
+    card.dataset.item = item;
+    card.innerHTML = `
+      <div class="top">
+        <h3>${item}</h3>
+        <span class="price-tag" data-tag>${money(def.price)}</span>
+        <span class="price-edit">$<input type="number" min="0" step="0.01" value="${def.price}" aria-label="price of ${item}"></span>
+      </div>
+      <p class="ing">${def.ings.length ? def.ings.join(' · ') : 'special item — no crafting needed'}</p>
+      <div class="stepper">
+        <button type="button" data-d="-1" aria-label="one less ${item}">−</button>
+        <input type="number" min="0" max="999" value="0" inputmode="numeric" aria-label="quantity of ${item}">
+        <button type="button" data-d="1" aria-label="one more ${item}">+</button>
+      </div>`;
+    grid.appendChild(card);
+
+    const qInput = card.querySelector('.stepper input');
+    card.querySelectorAll('.stepper button').forEach(b =>
+      b.addEventListener('click', () => setQty(item, qty[item] + Number(b.dataset.d), card, qInput))
+    );
+    qInput.addEventListener('input', () => setQty(item, parseInt(qInput.value,10) || 0, card, qInput, true));
+
+    const pInput = card.querySelector('.price-edit input');
+    const tag = card.querySelector('[data-tag]');
+    pInput.addEventListener('input', () => {
+      const v = parseFloat(pInput.value);
+      price[item] = isNaN(v) ? 0 : Math.max(0, v);
+      tag.textContent = money(price[item]);
+      render();
+    });
+  }
+  menuEl.appendChild(section);
+}
+
+document.getElementById('priceToggle').addEventListener('click', e => {
+  document.body.classList.toggle('pricing');
+  e.currentTarget.classList.toggle('on');
+  e.currentTarget.textContent = document.body.classList.contains('pricing') ? "✓ Done editing prices" : "✎ Edit prices";
+});
+
+function setQty(item, n, card, input, fromTyping=false) {
+  n = Math.max(0, Math.min(999, n));
+  qty[item] = n;
+  if (!fromTyping) input.value = n;
+  card.classList.toggle('active', n > 0);
+  render();
+}
+
+function ingredientTotals() {
+  const t = {};
+  for (const [item, def] of Object.entries(ITEMS))
+    if (qty[item] > 0)
+      for (const ing of def.ings) t[ing] = (t[ing] || 0) + craftsFor(item);
+  return t;
+}
+
+function orderedItems() {
+  return Object.values(MENU).flatMap(items => Object.keys(items).filter(i => qty[i] > 0));
+}
+
+function render() {
+  const items = orderedItems();
+  const orderEl = document.getElementById('orderLines');
+  const totalsEl = document.getElementById('orderTotals');
+
+  if (!items.length) {
+    orderEl.innerHTML = `<div class="r-empty">nothing on the ticket yet…<br>add some menu items! (˶˃ ᵕ ˂˶)</div>`;
+    totalsEl.innerHTML = "";
+  } else {
+    let total = 0;
+    orderEl.innerHTML = `<p class="r-sect">Order</p>` + items.map(item => {
+      const sub = price[item] * qty[item];
+      total += sub;
+      let note = "";
+      if (!isSpecial(item)) {
+        const c = craftsFor(item);
+        const spare = c * YIELD - qty[item];
+        note = `<div class="r-note">${c} craft${c>1?"s":""}${spare?` · ${spare} spare`:""}</div>`;
+      }
+      return `<div class="r-line"><span>${item} <span class="qty">×${qty[item]}</span></span><span class="dots"></span><span class="money">${money(sub)}</span></div>${note}`;
+    }).join('');
+    totalsEl.innerHTML =
+      `<hr class="dashes"><div class="r-total grand"><span>ORDER TOTAL</span><span>${money(total)}</span></div>`;
+  }
+
+  const t = ingredientTotals();
+  const entries = Object.entries(t).sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0]));
+  document.getElementById('ingLines').innerHTML = entries.length
+    ? entries.map(([ing,n]) => `<div class="r-line"><span>${ing}</span><span class="dots"></span><span class="qty">×${n}</span></div>`).join('')
+    : `<div class="r-empty" style="padding:8px">—</div>`;
+  document.getElementById('totalCount').textContent = entries.reduce((s,[,n]) => s+n, 0);
+}
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.querySelectorAll('.card').forEach(card => {
+    const item = card.dataset.item;
+    qty[item] = 0;
+    card.querySelector('.stepper input').value = 0;
+    card.classList.remove('active');
+  });
+  render();
+});
+
+function buildTicketText() {
+  const items = orderedItems();
+  if (!items.length) return null;
+  let total = 0;
+  const orderTxt = items.map(item => {
+    const sub = price[item] * qty[item];
+    total += sub;
+    const c = craftsFor(item);
+    const tail = c ? ` (${c} craft${c>1?"s":""})` : "";
+    return `${item} x${qty[item]}${tail}  ${money(sub)}`;
+  }).join("\n");
+  const ings = Object.entries(ingredientTotals()).sort((a,b)=>b[1]-a[1])
+    .map(([i,n]) => `${i} x${n}`).join("\n");
+  const server = document.getElementById('serverName').value.trim();
+  return { orderTxt, ings, total, server };
+}
+
+document.getElementById('copyBtn').addEventListener('click', async e => {
+  const t = buildTicketText();
+  if (!t) return;
+  const text = `UwU Cafe order${t.server ? ` — taken by ${t.server}` : ""}:\n${t.orderTxt}\nORDER TOTAL: ${money(t.total)}` +
+    (t.ings ? `\n\nIngredients needed (1 craft = 5 items):\n${t.ings}` : "");
+  try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied! ✧"; }
+  catch { e.target.textContent = "Copy failed"; }
+  setTimeout(() => e.target.textContent = "Copy ticket", 1500);
+});
+
+// ---- Discord webhook ----
+const webhookInput = document.getElementById('webhookUrl');
+const discordBtn = document.getElementById('discordBtn');
+const webhookHint = document.getElementById('webhookHint');
+
+// remember the webhook URL in this browser only (safe to fail, e.g. in previews)
+try { const saved = localStorage.getItem('uwuWebhook'); if (saved) webhookInput.value = saved; } catch {}
+webhookInput.addEventListener('change', () => {
+  try { localStorage.setItem('uwuWebhook', webhookInput.value.trim()); } catch {}
+});
+
+discordBtn.addEventListener('click', async () => {
+  const url = webhookInput.value.trim();
+  const ok = /^https:\/\/(discord\.com|discordapp\.com|ptb\.discord\.com|canary\.discord\.com)\/api\/webhooks\//.test(url);
+  if (!ok) { webhookHint.textContent = "that doesn't look like a Discord webhook URL"; return; }
+  const t = buildTicketText();
+  if (!t) { webhookHint.textContent = "add some items to the ticket first"; return; }
+
+  const embed = {
+    title: "🐱 UwU Cafe — Order Ticket",
+    color: 0xE86A96,
+    description: "```\n" + t.orderTxt + "\n```",
+    fields: [{ name: "Order total", value: "**" + money(t.total) + "**", inline: true }],
+    footer: { text: (t.server ? "taken by " + t.server + " · " : "") + "≽^•⩊•^≼" },
+    timestamp: new Date().toISOString()
+  };
+  if (t.ings) embed.fields.push({ name: "Ingredients needed (1 craft = 5)", value: "```\n" + t.ings + "\n```", inline: false });
+
+  discordBtn.disabled = true;
+  discordBtn.textContent = "Sending…";
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: "UwU Cafe Ticket", embeds: [embed] })
+    });
+    if (res.ok) { discordBtn.textContent = "Sent! ✧"; webhookHint.textContent = "ticket delivered to your Discord channel"; }
+    else { discordBtn.textContent = "Failed"; webhookHint.textContent = "Discord said no (" + res.status + ") — check the webhook URL"; }
+  } catch {
+    discordBtn.textContent = "Failed";
+    webhookHint.textContent = "couldn't reach Discord — check your connection";
+  }
+  setTimeout(() => { discordBtn.textContent = "Send ticket to Discord"; discordBtn.disabled = false; }, 2000);
+});
+
+render();
+</script>
+</body>
+</html>
