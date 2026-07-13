@@ -3,24 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UwU Cafe · Order & Ingredient Calculator</title>
+<title>UwU Cafe · Orders & Manager Overview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --milk:#FFF6F0;
-    --paper:#FFFFFF;
-    --ink:#4A2C35;
-    --ink-soft:#8A6470;
-    --pink:#F9A8C0;
-    --pink-deep:#E86A96;
-    --pink-wash:#FDE4EC;
-    --matcha:#9CC08B;
-    --matcha-deep:#5E8A4E;
-    --gold:#C9962E;
-    --line:#F3D7E0;
-    --shadow:0 6px 18px rgba(232,106,150,.14);
-    --radius:18px;
+    --milk:#FFF6F0; --paper:#FFFFFF; --ink:#4A2C35; --ink-soft:#8A6470;
+    --pink:#F9A8C0; --pink-deep:#E86A96; --pink-wash:#FDE4EC;
+    --matcha:#9CC08B; --matcha-deep:#5E8A4E; --gold:#C9962E;
+    --line:#F3D7E0; --shadow:0 6px 18px rgba(232,106,150,.14); --radius:18px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -30,31 +21,23 @@
       radial-gradient(circle at 12% 8%, #FFE9F1 0, transparent 30%),
       radial-gradient(circle at 88% 90%, #F0F7EA 0, transparent 32%),
       var(--milk);
-    color:var(--ink);
-    min-height:100vh;
+    color:var(--ink); min-height:100vh;
     padding:28px clamp(14px,4vw,48px) 80px;
   }
   header{max-width:1180px;margin:0 auto 22px}
   .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .cat-badge{
-    width:58px;height:58px;border-radius:50%;
-    background:var(--pink-wash);
-    display:grid;place-items:center;font-size:30px;
-    border:2px dashed var(--pink);
+    width:58px;height:58px;border-radius:50%;background:var(--pink-wash);
+    display:grid;place-items:center;font-size:30px;border:2px dashed var(--pink);
     animation:bob 3.5s ease-in-out infinite;
   }
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
   @media (prefers-reduced-motion:reduce){.cat-badge{animation:none}}
-  h1{
-    font-family:'Baloo 2',cursive;font-weight:800;
-    font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.05;letter-spacing:.5px;
-  }
+  h1{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.05;letter-spacing:.5px}
   h1 .uwu{color:var(--pink-deep)}
   .tagline{color:var(--ink-soft);font-weight:600;font-size:.95rem;margin-top:2px}
 
-  .toolbar{
-    max-width:1180px;margin:0 auto 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;
-  }
+  .toolbar{max-width:1180px;margin:0 auto 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .toolbar .hint{font-size:.8rem;color:var(--ink-soft);font-weight:600}
   .toggle{
     border:1.5px solid var(--line);background:#fff;color:var(--pink-deep);
@@ -64,11 +47,9 @@
   .toggle:hover{background:var(--pink-wash)}
   .toggle.on{background:var(--pink-deep);border-color:var(--pink-deep);color:#fff}
   .toggle:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
+  .spacer{flex:1}
 
-  .layout{
-    max-width:1180px;margin:0 auto;
-    display:grid;grid-template-columns:1fr 350px;gap:26px;align-items:start;
-  }
+  .layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 350px;gap:26px;align-items:start}
   @media(max-width:900px){.layout{grid-template-columns:1fr}}
 
   .cat-section{margin-bottom:30px}
@@ -88,26 +69,19 @@
   .card.special.active{border-color:var(--gold)}
   .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
   .card h3{font-family:'Baloo 2',cursive;font-weight:700;font-size:1.02rem;line-height:1.2}
-  .price-tag{
-    font:600 .82rem 'IBM Plex Mono',monospace;color:var(--matcha-deep);
-    background:#F0F7EA;border-radius:8px;padding:3px 7px;white-space:nowrap;
-  }
+  .price-tag{font:600 .82rem 'IBM Plex Mono',monospace;color:var(--matcha-deep);background:#F0F7EA;border-radius:8px;padding:3px 7px;white-space:nowrap}
   .card.special .price-tag{color:var(--gold);background:#FBF3DC}
   .price-edit{display:none;align-items:center;gap:4px;font:600 .8rem 'IBM Plex Mono',monospace;color:var(--matcha-deep)}
   body.pricing .price-edit{display:flex}
   body.pricing .price-tag{display:none}
-  .price-edit input{
-    width:78px;border:1.5px solid var(--matcha);border-radius:8px;padding:4px 6px;
-    font:600 .8rem 'IBM Plex Mono',monospace;color:var(--ink);text-align:right;
-  }
+  .price-edit input{width:78px;border:1.5px solid var(--matcha);border-radius:8px;padding:4px 6px;font:600 .8rem 'IBM Plex Mono',monospace;color:var(--ink);text-align:right}
   .price-edit input:focus{outline:3px solid var(--matcha);outline-offset:1px}
   .card .ing{color:var(--ink-soft);font-size:.78rem;font-weight:600;margin:6px 0 12px;line-height:1.5}
   .stepper{display:flex;align-items:center;gap:10px}
   .stepper button{
     width:34px;height:34px;border-radius:12px;border:none;cursor:pointer;
     font-family:'Baloo 2',cursive;font-size:1.25rem;font-weight:700;line-height:1;
-    background:var(--pink-wash);color:var(--pink-deep);
-    transition:background .15s, transform .1s;
+    background:var(--pink-wash);color:var(--pink-deep);transition:background .15s, transform .1s;
   }
   .stepper button:hover{background:var(--pink);color:#fff}
   .stepper button:active{transform:scale(.9)}
@@ -133,18 +107,14 @@
   .receipt h2{font-weight:600;font-size:.95rem;text-align:center;letter-spacing:2px;text-transform:uppercase}
   .receipt .sub{text-align:center;font-size:.68rem;color:var(--ink-soft);letter-spacing:1px;margin-top:3px}
   .dashes{border:none;border-top:1.5px dashed var(--line);margin:13px 0}
-  .server-row{
-    display:flex;align-items:baseline;gap:8px;margin-top:12px;
-    font-size:.78rem;
-  }
-  .server-row label{color:var(--ink-soft);letter-spacing:1px;text-transform:uppercase;font-size:.68rem}
-  .server-row input{
+  .field-row{display:flex;align-items:baseline;gap:8px;margin-top:10px;font-size:.78rem}
+  .field-row label{color:var(--ink-soft);letter-spacing:1px;text-transform:uppercase;font-size:.66rem;min-width:70px}
+  .field-row input{
     flex:1;border:none;border-bottom:1.5px dashed var(--line);background:transparent;
-    font:600 .82rem 'IBM Plex Mono',monospace;color:var(--pink-deep);
-    padding:2px 2px 4px;min-width:0;
+    font:600 .82rem 'IBM Plex Mono',monospace;color:var(--pink-deep);padding:2px 2px 4px;min-width:0;
   }
-  .server-row input::placeholder{color:#D9BAC5;font-weight:400}
-  .server-row input:focus{outline:none;border-bottom-color:var(--pink-deep)}
+  .field-row input::placeholder{color:#D9BAC5;font-weight:400}
+  .field-row input:focus{outline:none;border-bottom-color:var(--pink-deep)}
   .r-sect{font-size:.66rem;letter-spacing:1.5px;color:var(--ink-soft);margin:2px 0 5px;text-transform:uppercase}
   .r-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.78rem;padding:3px 0}
   .r-line .dots{flex:1;border-bottom:1.5px dotted var(--line);transform:translateY(-3px)}
@@ -155,14 +125,16 @@
   .r-total{display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;letter-spacing:.5px;padding:2px 0}
   .r-total.grand{font-size:.95rem;color:var(--matcha-deep)}
   .r-foot{text-align:center;font-size:.68rem;color:var(--ink-soft);margin-top:14px;letter-spacing:1px}
-  .r-actions{display:flex;gap:10px;margin-top:16px}
+  .r-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
   .btn{
     flex:1;border:none;cursor:pointer;border-radius:12px;padding:10px 8px;
-    font:700 .82rem 'Quicksand',sans-serif;letter-spacing:.4px;
-    transition:transform .1s, opacity .15s;
+    font:700 .82rem 'Quicksand',sans-serif;letter-spacing:.4px;transition:transform .1s, opacity .15s;
+    min-width:110px;
   }
   .btn:active{transform:scale(.96)}
   .btn:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
+  .btn-log{background:var(--pink-deep);color:#fff;flex-basis:100%}
+  .btn-log:hover{background:#D55482}
   .btn-copy{background:var(--matcha);color:#fff}
   .btn-copy:hover{background:var(--matcha-deep)}
   .btn-clear{background:var(--pink-wash);color:var(--pink-deep)}
@@ -177,6 +149,44 @@
   .btn-discord:hover{background:#4552D9}
   .btn-discord:disabled{opacity:.6;cursor:wait}
   .webhook-hint{font-size:.62rem;color:var(--ink-soft);text-align:center;letter-spacing:.3px}
+
+  /* ---------- MANAGER VIEW ---------- */
+  #managerView{display:none;max-width:1180px;margin:0 auto}
+  body.manager #orderView{display:none}
+  body.manager #managerView{display:block}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:26px}
+  .stat{
+    background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:16px 18px;box-shadow:0 2px 8px rgba(232,106,150,.06);
+  }
+  .stat .label{font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+  .stat .value{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.7rem;color:var(--pink-deep);line-height:1.2;margin-top:4px}
+  .stat .value.green{color:var(--matcha-deep)}
+  .panel{
+    background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:0 2px 8px rgba(232,106,150,.06);margin-bottom:22px;overflow-x:auto;
+  }
+  .panel h3{font-family:'Baloo 2',cursive;font-weight:700;font-size:1.1rem;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;font-size:.8rem}
+  th{
+    text-align:left;font-size:.64rem;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--ink-soft);padding:6px 10px;border-bottom:2px solid var(--line);white-space:nowrap;
+  }
+  th.num, td.num{text-align:right}
+  td{padding:7px 10px;border-bottom:1px solid #FBEEF3;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td .money{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--matcha-deep)}
+  .bar{height:8px;border-radius:99px;background:var(--pink-wash);overflow:hidden;min-width:90px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--pink-deep));border-radius:99px}
+  .items-mini{font-size:.72rem;color:var(--ink-soft);line-height:1.5}
+  .mgr-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+  .mgr-actions .btn{flex:0 1 auto;padding:10px 18px}
+  .btn-danger{background:#fff;border:1.5px solid var(--pink);color:var(--pink-deep)}
+  .btn-danger:hover{background:var(--pink-wash)}
+  .empty-log{
+    text-align:center;color:var(--ink-soft);font-weight:600;padding:40px 20px;line-height:1.8;
+    background:#fff;border:1.5px dashed var(--line);border-radius:var(--radius);
+  }
 </style>
 </head>
 <body>
@@ -185,27 +195,38 @@
   <div class="brand">
     <div class="cat-badge" aria-hidden="true">🐱</div>
     <div>
-      <h1><span class="uwu">UwU Cafe</span> Order Calculator</h1>
-      <p class="tagline">pick the order — get the bill and the shopping list · 1 craft makes 5 items ✧</p>
+      <h1><span class="uwu">UwU Cafe</span> <span id="pageTitle">Order Calculator</span></h1>
+      <p class="tagline" id="pageTag">pick the order — get the bill and the shopping list · 1 craft makes 5 items ✧</p>
     </div>
   </div>
 </header>
 
 <div class="toolbar">
   <button class="toggle" id="priceToggle" type="button">✎ Edit prices</button>
-  <span class="hint">prices loaded from the sheet — menu items $100, specials priced individually</span>
+  <span class="hint" id="toolbarHint">log each order and the manager page keeps the running totals</span>
+  <span class="spacer"></span>
+  <button class="toggle" id="viewToggle" type="button">📊 Manager overview</button>
 </div>
 
-<div class="layout">
+<!-- ============ ORDER VIEW ============ -->
+<div class="layout" id="orderView">
   <main id="menu"></main>
 
   <aside class="receipt-wrap" aria-live="polite">
     <div class="receipt">
       <h2>· Order Ticket ·</h2>
       <p class="sub">UWU CAFE — PREP &amp; BILL</p>
-      <div class="server-row">
+      <div class="field-row">
         <label for="serverName">server:</label>
         <input id="serverName" type="text" maxlength="40" placeholder="who took the order?" autocomplete="off">
+      </div>
+      <div class="field-row">
+        <label for="customerName">customer:</label>
+        <input id="customerName" type="text" maxlength="60" placeholder="who's it for?" autocomplete="off">
+      </div>
+      <div class="field-row">
+        <label for="tipAmount">tip/extra $:</label>
+        <input id="tipAmount" type="number" min="0" step="1" placeholder="0" inputmode="numeric">
       </div>
       <hr class="dashes">
       <div id="orderLines"></div>
@@ -216,8 +237,9 @@
       <hr class="dashes">
       <div class="r-total"><span>TOTAL INGREDIENTS</span><span id="totalCount">0</span></div>
       <div class="r-actions">
+        <button class="btn btn-log" id="logBtn" type="button">✧ Log order to overview</button>
         <button class="btn btn-copy" id="copyBtn" type="button">Copy ticket</button>
-        <button class="btn btn-clear" id="clearBtn" type="button">Clear all</button>
+        <button class="btn btn-clear" id="clearBtn" type="button">Clear</button>
       </div>
       <div class="webhook-row">
         <input id="webhookUrl" type="url" placeholder="paste Discord webhook URL…" autocomplete="off" spellcheck="false" aria-label="Discord webhook URL">
@@ -229,10 +251,52 @@
   </aside>
 </div>
 
-<script>
-const YIELD = 5; // one craft uses 1 of each ingredient and makes 5 finished items
+<!-- ============ MANAGER VIEW ============ -->
+<div id="managerView">
+  <div class="stat-grid">
+    <div class="stat"><div class="label">Total revenue</div><div class="value green" id="statRevenue">$0</div></div>
+    <div class="stat"><div class="label">Orders logged</div><div class="value" id="statOrders">0</div></div>
+    <div class="stat"><div class="label">Items sold</div><div class="value" id="statItems">0</div></div>
+    <div class="stat"><div class="label">Top seller</div><div class="value" id="statTop" style="font-size:1.2rem">—</div></div>
+  </div>
 
-// { name: { price, ings } } — ings: [] means a special item, sold as-is (no crafting)
+  <div class="mgr-actions">
+    <button class="btn btn-copy" id="csvBtn" type="button">⬇ Export CSV (for the sheet)</button>
+    <button class="btn btn-danger" id="wipeBtn" type="button">Clear all logged orders</button>
+  </div>
+
+  <div class="panel">
+    <h3>💁 By employee</h3>
+    <table>
+      <thead><tr><th>Employee</th><th class="num">Orders</th><th class="num">Revenue</th><th>Share</th></tr></thead>
+      <tbody id="empRows"></tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>🍰 Items sold</h3>
+    <table>
+      <thead><tr><th>Item</th><th class="num">Qty sold</th><th class="num">Revenue</th><th>Share</th></tr></thead>
+      <tbody id="itemRows"></tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>🧾 Order log</h3>
+    <table>
+      <thead><tr><th>Date</th><th>Customer</th><th>Employee</th><th>Items</th><th class="num">Amount</th></tr></thead>
+      <tbody id="logRows"></tbody>
+    </table>
+  </div>
+
+  <div class="empty-log" id="emptyLog" style="display:none">
+    no orders logged yet… (˶˃ ᵕ ˂˶)<br>take an order and hit "✧ Log order to overview"
+  </div>
+</div>
+
+<script>
+const YIELD = 5;
+
 const MENU = {
   "Drinks 🧋": {
     "Matcha Coffee":        { price:100, ings:["matcha powder","milk","brewed coffee"] },
@@ -274,25 +338,26 @@ const MENU = {
 
 const qty = {}, price = {}, ITEMS = {};
 for (const items of Object.values(MENU))
-  for (const [item, def] of Object.entries(items)) { qty[item] = 0; price[item] = def.price; ITEMS[item] = def; }
+  for (const [item, def] of Object.entries(items)) { qty[item]=0; price[item]=def.price; ITEMS[item]=def; }
+const ITEM_ORDER = Object.keys(ITEMS);
 
-const menuEl = document.getElementById('menu');
 const money = n => "$" + n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 const isSpecial = item => ITEMS[item].ings.length === 0;
 const craftsFor = item => isSpecial(item) ? 0 : Math.ceil(qty[item] / YIELD);
+const store = {
+  get(k, fb){ try { const v = localStorage.getItem(k); return v === null ? fb : JSON.parse(v); } catch { return fb; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+let orders = store.get('uwuOrders', []);
 
+/* ---------- build menu ---------- */
+const menuEl = document.getElementById('menu');
 for (const [cat, items] of Object.entries(MENU)) {
-  const parts = cat.split(' ');
-  const emoji = parts.pop();
-  const name = parts.join(' ');
+  const parts = cat.split(' '); const emoji = parts.pop(); const name = parts.join(' ');
   const section = document.createElement('section');
   section.className = 'cat-section';
   section.innerHTML = `
-    <div class="cat-head">
-      <span class="cat-emoji" aria-hidden="true">${emoji}</span>
-      <h2>${name}</h2>
-      <span class="rule"></span>
-    </div>
+    <div class="cat-head"><span class="cat-emoji" aria-hidden="true">${emoji}</span><h2>${name}</h2><span class="rule"></span></div>
     <div class="menu-grid"></div>`;
   const grid = section.querySelector('.menu-grid');
 
@@ -332,12 +397,26 @@ for (const [cat, items] of Object.entries(MENU)) {
   menuEl.appendChild(section);
 }
 
+/* ---------- toggles ---------- */
 document.getElementById('priceToggle').addEventListener('click', e => {
   document.body.classList.toggle('pricing');
   e.currentTarget.classList.toggle('on');
   e.currentTarget.textContent = document.body.classList.contains('pricing') ? "✓ Done editing prices" : "✎ Edit prices";
 });
 
+const viewToggle = document.getElementById('viewToggle');
+viewToggle.addEventListener('click', () => {
+  const mgr = document.body.classList.toggle('manager');
+  viewToggle.classList.toggle('on', mgr);
+  viewToggle.textContent = mgr ? "📋 Take orders" : "📊 Manager overview";
+  document.getElementById('pageTitle').textContent = mgr ? "Manager Overview" : "Order Calculator";
+  document.getElementById('pageTag').textContent = mgr
+    ? "running totals from every order logged on this device ✧"
+    : "pick the order — get the bill and the shopping list · 1 craft makes 5 items ✧";
+  if (mgr) renderManager();
+});
+
+/* ---------- ticket ---------- */
 function setQty(item, n, card, input, fromTyping=false) {
   n = Math.max(0, Math.min(999, n));
   qty[item] = n;
@@ -345,7 +424,6 @@ function setQty(item, n, card, input, fromTyping=false) {
   card.classList.toggle('active', n > 0);
   render();
 }
-
 function ingredientTotals() {
   const t = {};
   for (const [item, def] of Object.entries(ITEMS))
@@ -353,24 +431,22 @@ function ingredientTotals() {
       for (const ing of def.ings) t[ing] = (t[ing] || 0) + craftsFor(item);
   return t;
 }
-
-function orderedItems() {
-  return Object.values(MENU).flatMap(items => Object.keys(items).filter(i => qty[i] > 0));
-}
+function orderedItems(){ return ITEM_ORDER.filter(i => qty[i] > 0); }
+function tipValue(){ const v = parseFloat(document.getElementById('tipAmount').value); return isNaN(v) ? 0 : Math.max(0, v); }
+function grandTotal(){ return orderedItems().reduce((s,i) => s + price[i]*qty[i], 0) + tipValue(); }
 
 function render() {
   const items = orderedItems();
   const orderEl = document.getElementById('orderLines');
   const totalsEl = document.getElementById('orderTotals');
+  const tip = tipValue();
 
-  if (!items.length) {
+  if (!items.length && !tip) {
     orderEl.innerHTML = `<div class="r-empty">nothing on the ticket yet…<br>add some menu items! (˶˃ ᵕ ˂˶)</div>`;
     totalsEl.innerHTML = "";
   } else {
-    let total = 0;
     orderEl.innerHTML = `<p class="r-sect">Order</p>` + items.map(item => {
       const sub = price[item] * qty[item];
-      total += sub;
       let note = "";
       if (!isSpecial(item)) {
         const c = craftsFor(item);
@@ -378,9 +454,9 @@ function render() {
         note = `<div class="r-note">${c} craft${c>1?"s":""}${spare?` · ${spare} spare`:""}</div>`;
       }
       return `<div class="r-line"><span>${item} <span class="qty">×${qty[item]}</span></span><span class="dots"></span><span class="money">${money(sub)}</span></div>${note}`;
-    }).join('');
-    totalsEl.innerHTML =
-      `<hr class="dashes"><div class="r-total grand"><span>ORDER TOTAL</span><span>${money(total)}</span></div>`;
+    }).join('') +
+    (tip ? `<div class="r-line"><span>tip / extra</span><span class="dots"></span><span class="money">${money(tip)}</span></div>` : "");
+    totalsEl.innerHTML = `<hr class="dashes"><div class="r-total grand"><span>ORDER TOTAL</span><span>${money(grandTotal())}</span></div>`;
   }
 
   const t = ingredientTotals();
@@ -390,54 +466,76 @@ function render() {
     : `<div class="r-empty" style="padding:8px">—</div>`;
   document.getElementById('totalCount').textContent = entries.reduce((s,[,n]) => s+n, 0);
 }
+document.getElementById('tipAmount').addEventListener('input', render);
 
-document.getElementById('clearBtn').addEventListener('click', () => {
-  document.querySelectorAll('.card').forEach(card => {
+function clearTicket() {
+  document.querySelectorAll('#orderView .card').forEach(card => {
     const item = card.dataset.item;
     qty[item] = 0;
     card.querySelector('.stepper input').value = 0;
     card.classList.remove('active');
   });
+  document.getElementById('customerName').value = "";
+  document.getElementById('tipAmount').value = "";
   render();
+}
+document.getElementById('clearBtn').addEventListener('click', clearTicket);
+
+/* ---------- log order ---------- */
+document.getElementById('logBtn').addEventListener('click', e => {
+  const items = orderedItems();
+  const tip = tipValue();
+  if (!items.length && !tip) { e.target.textContent = "nothing to log!"; setTimeout(()=>e.target.textContent="✧ Log order to overview",1400); return; }
+  const rec = {
+    ts: Date.now(),
+    date: new Date().toLocaleDateString(),
+    customer: document.getElementById('customerName').value.trim() || "—",
+    employee: document.getElementById('serverName').value.trim() || "—",
+    tip,
+    total: grandTotal(),
+    items: Object.fromEntries(items.map(i => [i, qty[i]]))
+  };
+  orders.push(rec);
+  store.set('uwuOrders', orders);
+  e.target.textContent = "Logged! ✧";
+  setTimeout(() => e.target.textContent = "✧ Log order to overview", 1400);
+  clearTicket();
 });
 
+/* ---------- copy & discord ---------- */
 function buildTicketText() {
   const items = orderedItems();
-  if (!items.length) return null;
-  let total = 0;
+  const tip = tipValue();
+  if (!items.length && !tip) return null;
   const orderTxt = items.map(item => {
     const sub = price[item] * qty[item];
-    total += sub;
     const c = craftsFor(item);
     const tail = c ? ` (${c} craft${c>1?"s":""})` : "";
     return `${item} x${qty[item]}${tail}  ${money(sub)}`;
-  }).join("\n");
-  const ings = Object.entries(ingredientTotals()).sort((a,b)=>b[1]-a[1])
-    .map(([i,n]) => `${i} x${n}`).join("\n");
-  const server = document.getElementById('serverName').value.trim();
-  return { orderTxt, ings, total, server };
+  }).join("\n") + (tip ? `${items.length?"\n":""}tip/extra  ${money(tip)}` : "");
+  const ings = Object.entries(ingredientTotals()).sort((a,b)=>b[1]-a[1]).map(([i,n]) => `${i} x${n}`).join("\n");
+  return {
+    orderTxt, ings, total: grandTotal(),
+    server: document.getElementById('serverName').value.trim(),
+    customer: document.getElementById('customerName').value.trim()
+  };
 }
-
 document.getElementById('copyBtn').addEventListener('click', async e => {
   const t = buildTicketText();
   if (!t) return;
-  const text = `UwU Cafe order${t.server ? ` — taken by ${t.server}` : ""}:\n${t.orderTxt}\nORDER TOTAL: ${money(t.total)}` +
+  const head = `UwU Cafe order${t.customer ? ` for ${t.customer}` : ""}${t.server ? ` — taken by ${t.server}` : ""}:`;
+  const text = `${head}\n${t.orderTxt}\nORDER TOTAL: ${money(t.total)}` +
     (t.ings ? `\n\nIngredients needed (1 craft = 5 items):\n${t.ings}` : "");
   try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied! ✧"; }
   catch { e.target.textContent = "Copy failed"; }
   setTimeout(() => e.target.textContent = "Copy ticket", 1500);
 });
 
-// ---- Discord webhook ----
 const webhookInput = document.getElementById('webhookUrl');
 const discordBtn = document.getElementById('discordBtn');
 const webhookHint = document.getElementById('webhookHint');
-
-// remember the webhook URL in this browser only (safe to fail, e.g. in previews)
 try { const saved = localStorage.getItem('uwuWebhook'); if (saved) webhookInput.value = saved; } catch {}
-webhookInput.addEventListener('change', () => {
-  try { localStorage.setItem('uwuWebhook', webhookInput.value.trim()); } catch {}
-});
+webhookInput.addEventListener('change', () => { try { localStorage.setItem('uwuWebhook', webhookInput.value.trim()); } catch {} });
 
 discordBtn.addEventListener('click', async () => {
   const url = webhookInput.value.trim();
@@ -445,9 +543,8 @@ discordBtn.addEventListener('click', async () => {
   if (!ok) { webhookHint.textContent = "that doesn't look like a Discord webhook URL"; return; }
   const t = buildTicketText();
   if (!t) { webhookHint.textContent = "add some items to the ticket first"; return; }
-
   const embed = {
-    title: "🐱 UwU Cafe — Order Ticket",
+    title: "🐱 UwU Cafe — Order Ticket" + (t.customer ? ` · ${t.customer}` : ""),
     color: 0xE86A96,
     description: "```\n" + t.orderTxt + "\n```",
     fields: [{ name: "Order total", value: "**" + money(t.total) + "**", inline: true }],
@@ -455,22 +552,83 @@ discordBtn.addEventListener('click', async () => {
     timestamp: new Date().toISOString()
   };
   if (t.ings) embed.fields.push({ name: "Ingredients needed (1 craft = 5)", value: "```\n" + t.ings + "\n```", inline: false });
-
-  discordBtn.disabled = true;
-  discordBtn.textContent = "Sending…";
+  discordBtn.disabled = true; discordBtn.textContent = "Sending…";
   try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: "UwU Cafe Ticket", embeds: [embed] })
-    });
+    const res = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ username:"UwU Cafe Ticket", embeds:[embed] }) });
     if (res.ok) { discordBtn.textContent = "Sent! ✧"; webhookHint.textContent = "ticket delivered to your Discord channel"; }
     else { discordBtn.textContent = "Failed"; webhookHint.textContent = "Discord said no (" + res.status + ") — check the webhook URL"; }
-  } catch {
-    discordBtn.textContent = "Failed";
-    webhookHint.textContent = "couldn't reach Discord — check your connection";
-  }
+  } catch { discordBtn.textContent = "Failed"; webhookHint.textContent = "couldn't reach Discord — check your connection"; }
   setTimeout(() => { discordBtn.textContent = "Send ticket to Discord"; discordBtn.disabled = false; }, 2000);
+});
+
+/* ---------- manager view ---------- */
+function renderManager() {
+  const hasOrders = orders.length > 0;
+  document.getElementById('emptyLog').style.display = hasOrders ? "none" : "block";
+  document.querySelectorAll('#managerView .panel').forEach(p => p.style.display = hasOrders ? "block" : "none");
+
+  let revenue = 0, itemCount = 0;
+  const byEmp = {}, byItem = {};
+  for (const o of orders) {
+    revenue += o.total;
+    const emp = (o.employee || "—").trim() || "—";
+    byEmp[emp] = byEmp[emp] || { orders:0, revenue:0 };
+    byEmp[emp].orders++; byEmp[emp].revenue += o.total;
+    for (const [item, n] of Object.entries(o.items || {})) {
+      itemCount += n;
+      byItem[item] = byItem[item] || { qty:0, revenue:0 };
+      byItem[item].qty += n;
+      byItem[item].revenue += n * (price[item] ?? 0);
+    }
+  }
+  document.getElementById('statRevenue').textContent = money(revenue);
+  document.getElementById('statOrders').textContent = orders.length;
+  document.getElementById('statItems').textContent = itemCount.toLocaleString();
+  const topItem = Object.entries(byItem).sort((a,b)=>b[1].qty-a[1].qty)[0];
+  document.getElementById('statTop').textContent = topItem ? `${topItem[0]} ×${topItem[1].qty}` : "—";
+
+  const empEntries = Object.entries(byEmp).sort((a,b)=>b[1].revenue-a[1].revenue);
+  const maxEmpRev = Math.max(1, ...empEntries.map(([,v])=>v.revenue));
+  document.getElementById('empRows').innerHTML = empEntries.map(([emp,v]) => `
+    <tr><td>${esc(emp)}</td><td class="num">${v.orders}</td><td class="num"><span class="money">${money(v.revenue)}</span></td>
+    <td><div class="bar"><i style="width:${(v.revenue/maxEmpRev*100).toFixed(1)}%"></i></div></td></tr>`).join('');
+
+  const itemEntries = Object.entries(byItem).sort((a,b)=>b[1].qty-a[1].qty);
+  const maxQty = Math.max(1, ...itemEntries.map(([,v])=>v.qty));
+  document.getElementById('itemRows').innerHTML = itemEntries.map(([item,v]) => `
+    <tr><td>${esc(item)}</td><td class="num">${v.qty}</td><td class="num"><span class="money">${money(v.revenue)}</span></td>
+    <td><div class="bar"><i style="width:${(v.qty/maxQty*100).toFixed(1)}%"></i></div></td></tr>`).join('');
+
+  document.getElementById('logRows').innerHTML = [...orders].reverse().map(o => `
+    <tr><td>${esc(o.date)}</td><td>${esc(o.customer)}</td><td>${esc(o.employee)}</td>
+    <td class="items-mini">${Object.entries(o.items||{}).map(([i,n])=>`${esc(i)} ×${n}`).join(", ") || "—"}${o.tip?`${Object.keys(o.items||{}).length?", ":""}tip ${money(o.tip)}`:""}</td>
+    <td class="num"><span class="money">${money(o.total)}</span></td></tr>`).join('');
+}
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+document.getElementById('csvBtn').addEventListener('click', () => {
+  if (!orders.length) return;
+  const q = s => `"${String(s).replace(/"/g,'""')}"`;
+  const header = ["Date","Customer","Employee","Amount","Tip",...ITEM_ORDER].map(q).join(",");
+  const rows = orders.map(o =>
+    [o.date, o.customer, o.employee, o.total, o.tip || 0, ...ITEM_ORDER.map(i => o.items?.[i] || "")].map(q).join(",")
+  );
+  const blob = new Blob([header + "\n" + rows.join("\n")], { type: "text/csv" });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = "uwu-cafe-orders.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.getElementById('wipeBtn').addEventListener('click', () => {
+  if (!orders.length) return;
+  if (confirm("Clear ALL logged orders on this device? This can't be undone — export the CSV first if you need it!")) {
+    orders = [];
+    store.set('uwuOrders', orders);
+    renderManager();
+  }
 });
 
 render();
