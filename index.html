@@ -1,637 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>UwU Cafe · Orders & Manager Overview</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --milk:#FFF6F0; --paper:#FFFFFF; --ink:#4A2C35; --ink-soft:#8A6470;
-    --pink:#F9A8C0; --pink-deep:#E86A96; --pink-wash:#FDE4EC;
-    --matcha:#9CC08B; --matcha-deep:#5E8A4E; --gold:#C9962E;
-    --line:#F3D7E0; --shadow:0 6px 18px rgba(232,106,150,.14); --radius:18px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:'Quicksand',sans-serif;
-    background:
-      radial-gradient(circle at 12% 8%, #FFE9F1 0, transparent 30%),
-      radial-gradient(circle at 88% 90%, #F0F7EA 0, transparent 32%),
-      var(--milk);
-    color:var(--ink); min-height:100vh;
-    padding:28px clamp(14px,4vw,48px) 80px;
-  }
-  header{max-width:1180px;margin:0 auto 22px}
-  .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .cat-badge{
-    width:58px;height:58px;border-radius:50%;background:var(--pink-wash);
-    display:grid;place-items:center;font-size:30px;border:2px dashed var(--pink);
-    animation:bob 3.5s ease-in-out infinite;
-  }
-  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
-  @media (prefers-reduced-motion:reduce){.cat-badge{animation:none}}
-  h1{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.05;letter-spacing:.5px}
-  h1 .uwu{color:var(--pink-deep)}
-  .tagline{color:var(--ink-soft);font-weight:600;font-size:.95rem;margin-top:2px}
+:root{--milk:#fff6f0;--paper:#fff;--ink:#4a2c35;--soft:#8a6470;--pink:#f9a8c0;--deep:#e86a96;--wash:#fde4ec;--green:#5e8a4e;--line:#f3d7e0;--radius:18px}*{box-sizing:border-box}body{font-family:Quicksand,sans-serif;background:radial-gradient(circle at 12% 8%,#ffe9f1,transparent 30%),radial-gradient(circle at 88% 90%,#f0f7ea,transparent 32%),var(--milk);color:var(--ink);margin:0;padding:28px clamp(14px,4vw,48px) 80px}header,.toolbar,.layout,#managerView{max-width:1180px;margin-left:auto;margin-right:auto}.brand{display:flex;align-items:center;gap:14px}.cat-badge{width:58px;height:58px;border:2px dashed var(--pink);border-radius:50%;display:grid;place-items:center;background:var(--wash);font-size:30px}h1,h2,h3{font-family:'Baloo 2',cursive}h1{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.1;margin:0}.uwu{color:var(--deep)}.tagline{color:var(--soft);font-size:.93rem;font-weight:600;margin:4px 0 0}.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px;margin-bottom:18px}.hint{font-size:.8rem;color:var(--soft);font-weight:600}.spacer{flex:1}.toggle{border:1.5px solid var(--line);background:#fff;color:var(--deep);font:700 .82rem Quicksand,sans-serif;border-radius:99px;padding:9px 16px;cursor:pointer}.toggle.on{background:var(--deep);color:#fff}.layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:26px;align-items:start}.cat-section{margin-bottom:30px}.cat-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}.cat-head h2{font-size:1.25rem;margin:0}.rule{flex:1;height:2px;background:linear-gradient(90deg,var(--line),transparent)}.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px}.card,.stat,.panel{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:0 2px 8px #e86a960f}.card.active{border-color:var(--pink);box-shadow:0 6px 18px #e86a9624}.card .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.card h3{font-size:1.03rem;line-height:1.2;margin:0}.price-tag{font:600 .82rem 'IBM Plex Mono',monospace;color:var(--green);background:#f0f7ea;border-radius:8px;padding:4px 7px;white-space:nowrap}.price-edit{display:none;align-items:center;color:var(--green)}body.pricing .price-edit{display:flex}body.pricing .price-tag{display:none}.price-edit input{width:74px;border:1.5px solid #9cc08b;border-radius:8px;padding:5px;color:var(--ink)}.ing{font-size:.79rem;color:var(--soft);margin:8px 0 12px;font-weight:600}.stepper{display:flex;gap:10px;align-items:center}.stepper button{width:34px;height:34px;background:var(--wash);color:var(--deep);border:0;border-radius:12px;font:700 1.25rem 'Baloo 2',cursive;cursor:pointer}.stepper button:hover{background:var(--pink);color:#fff}.stepper input{width:56px;padding:7px 4px;border:1.5px solid var(--line);border-radius:12px;text-align:center;color:var(--ink);font:600 1rem Quicksand,sans-serif}.receipt-wrap{position:sticky;top:20px}.receipt{background:#fff;padding:22px 20px 30px;box-shadow:0 10px 30px #4a2c3526;font-family:'IBM Plex Mono',monospace;position:relative}.receipt:after{content:"";position:absolute;bottom:-12px;left:0;right:0;height:12px;background:linear-gradient(-45deg,transparent 8px,#fff 0) left/16px 12px repeat-x,linear-gradient(45deg,transparent 8px,#fff 0) left/16px 12px repeat-x}.receipt h2{text-align:center;font:600 .95rem 'IBM Plex Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin:0}.sub{text-align:center;font-size:.68rem;color:var(--soft);letter-spacing:1px;margin:5px 0}.dashes{border:0;border-top:1.5px dashed var(--line);margin:13px 0}.field-row{display:flex;align-items:baseline;gap:8px;margin-top:11px}.field-row label{font-size:.67rem;text-transform:uppercase;color:var(--soft);min-width:70px}.field-row input{flex:1;min-width:0;border:0;border-bottom:1.5px dashed var(--line);padding:4px 2px;background:transparent;font:600 .8rem 'IBM Plex Mono',monospace;color:var(--deep)}.r-sect{font-size:.66rem;text-transform:uppercase;color:var(--soft);letter-spacing:1.5px}.r-line{display:flex;align-items:baseline;gap:6px;font-size:.77rem;padding:4px 0}.dots{flex:1;border-bottom:1px dotted var(--line)}.qty{color:var(--deep);font-weight:600}.money{color:var(--green);font-weight:600}.r-empty{text-align:center;color:var(--soft);padding:16px 5px;font-size:.78rem}.r-total{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600}.grand{font-size:.98rem;color:var(--green)}.r-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:12px;padding:10px 12px;cursor:pointer;font:700 .82rem Quicksand,sans-serif;flex:1;min-width:100px}.btn-log{background:var(--deep);color:white;flex-basis:100%}.btn-copy{background:#9cc08b;color:white}.btn-clear{background:var(--wash);color:var(--deep)}.webhook-row{display:flex;flex-direction:column;gap:8px;margin-top:15px}.webhook-row input{padding:10px;border:1.5px solid var(--line);border-radius:12px;min-width:0;font:500 .72rem 'IBM Plex Mono',monospace}.btn-discord{background:#5865f2;color:#fff}.webhook-hint,.r-foot{text-align:center;color:var(--soft);font-size:.65rem;margin:9px 0}.r-foot{margin-top:18px}#managerView{display:none}body.manager #orderView{display:none}body.manager #managerView{display:block}.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}.stat .label{text-transform:uppercase;font-size:.68rem;letter-spacing:1.5px;color:var(--soft);font-weight:700}.stat .value{font:800 1.7rem 'Baloo 2',cursive;color:var(--deep)}.stat .value.green{color:var(--green)}.panel{margin-bottom:20px;overflow-x:auto}.panel h3{margin:0 0 12px;font-size:1.1rem}table{width:100%;border-collapse:collapse;font-size:.81rem}th{text-align:left;color:var(--soft);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;border-bottom:2px solid var(--line)}th,td{padding:8px 9px}td{border-bottom:1px solid #fbeef3}th.num,td.num{text-align:right}.bar{height:8px;background:var(--wash);border-radius:99px;overflow:hidden;min-width:85px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--deep))}.items-mini{color:var(--soft);font-size:.72rem}.mgr-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}.mgr-actions .btn{flex:0 1 auto}.btn-danger{background:#fff;border:1.5px solid var(--pink);color:var(--deep)}.empty-log{text-align:center;color:var(--soft);padding:35px;border:1.5px dashed var(--line);border-radius:var(--radius)}@media(max-width:900px){.layout{grid-template-columns:1fr}.receipt-wrap{position:static}}button:focus-visible,input:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
 
-  .toolbar{max-width:1180px;margin:0 auto 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  .toolbar .hint{font-size:.8rem;color:var(--ink-soft);font-weight:600}
-  .toggle{
-    border:1.5px solid var(--line);background:#fff;color:var(--pink-deep);
-    font:700 .82rem 'Quicksand',sans-serif;border-radius:99px;padding:8px 16px;cursor:pointer;
-    transition:background .15s;
-  }
-  .toggle:hover{background:var(--pink-wash)}
-  .toggle.on{background:var(--pink-deep);border-color:var(--pink-deep);color:#fff}
-  .toggle:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
-  .spacer{flex:1}
-
-  .layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 350px;gap:26px;align-items:start}
-  @media(max-width:900px){.layout{grid-template-columns:1fr}}
-
-  .cat-section{margin-bottom:30px}
-  .cat-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .cat-head h2{font-family:'Baloo 2',cursive;font-weight:700;font-size:1.25rem;letter-spacing:.4px}
-  .cat-head .rule{flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--line),transparent)}
-  .cat-emoji{font-size:1.3rem}
-
-  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:14px}
-  .card{
-    background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);
-    padding:14px 14px 12px;box-shadow:0 2px 8px rgba(232,106,150,.06);
-    transition:border-color .18s, box-shadow .18s, transform .18s;
-  }
-  .card.active{border-color:var(--pink);box-shadow:var(--shadow);transform:translateY(-2px)}
-  .card.special{border-style:dashed;border-color:#EAD9A8}
-  .card.special.active{border-color:var(--gold)}
-  .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-  .card h3{font-family:'Baloo 2',cursive;font-weight:700;font-size:1.02rem;line-height:1.2}
-  .price-tag{font:600 .82rem 'IBM Plex Mono',monospace;color:var(--matcha-deep);background:#F0F7EA;border-radius:8px;padding:3px 7px;white-space:nowrap}
-  .card.special .price-tag{color:var(--gold);background:#FBF3DC}
-  .price-edit{display:none;align-items:center;gap:4px;font:600 .8rem 'IBM Plex Mono',monospace;color:var(--matcha-deep)}
-  body.pricing .price-edit{display:flex}
-  body.pricing .price-tag{display:none}
-  .price-edit input{width:78px;border:1.5px solid var(--matcha);border-radius:8px;padding:4px 6px;font:600 .8rem 'IBM Plex Mono',monospace;color:var(--ink);text-align:right}
-  .price-edit input:focus{outline:3px solid var(--matcha);outline-offset:1px}
-  .card .ing{color:var(--ink-soft);font-size:.78rem;font-weight:600;margin:6px 0 12px;line-height:1.5}
-  .stepper{display:flex;align-items:center;gap:10px}
-  .stepper button{
-    width:34px;height:34px;border-radius:12px;border:none;cursor:pointer;
-    font-family:'Baloo 2',cursive;font-size:1.25rem;font-weight:700;line-height:1;
-    background:var(--pink-wash);color:var(--pink-deep);transition:background .15s, transform .1s;
-  }
-  .stepper button:hover{background:var(--pink);color:#fff}
-  .stepper button:active{transform:scale(.9)}
-  .stepper button:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
-  .stepper input{
-    width:56px;text-align:center;border:1.5px solid var(--line);border-radius:12px;
-    padding:7px 4px;font:600 1rem 'Quicksand',sans-serif;color:var(--ink);background:#fff;
-  }
-  .stepper input:focus{outline:3px solid var(--pink);outline-offset:1px;border-color:var(--pink)}
-
-  .receipt-wrap{position:sticky;top:20px}
-  @media(max-width:900px){.receipt-wrap{position:static}}
-  .receipt{
-    background:#fff;font-family:'IBM Plex Mono',monospace;border-radius:6px 6px 0 0;
-    box-shadow:0 10px 30px rgba(74,44,53,.15);padding:22px 20px 30px;position:relative;
-  }
-  .receipt::after{
-    content:"";position:absolute;left:0;right:0;bottom:-12px;height:12px;
-    background:
-      linear-gradient(-45deg, transparent 8px, #fff 0) left/16px 12px repeat-x,
-      linear-gradient(45deg, transparent 8px, #fff 0) left/16px 12px repeat-x;
-  }
-  .receipt h2{font-weight:600;font-size:.95rem;text-align:center;letter-spacing:2px;text-transform:uppercase}
-  .receipt .sub{text-align:center;font-size:.68rem;color:var(--ink-soft);letter-spacing:1px;margin-top:3px}
-  .dashes{border:none;border-top:1.5px dashed var(--line);margin:13px 0}
-  .field-row{display:flex;align-items:baseline;gap:8px;margin-top:10px;font-size:.78rem}
-  .field-row label{color:var(--ink-soft);letter-spacing:1px;text-transform:uppercase;font-size:.66rem;min-width:70px}
-  .field-row input{
-    flex:1;border:none;border-bottom:1.5px dashed var(--line);background:transparent;
-    font:600 .82rem 'IBM Plex Mono',monospace;color:var(--pink-deep);padding:2px 2px 4px;min-width:0;
-  }
-  .field-row input::placeholder{color:#D9BAC5;font-weight:400}
-  .field-row input:focus{outline:none;border-bottom-color:var(--pink-deep)}
-  .r-sect{font-size:.66rem;letter-spacing:1.5px;color:var(--ink-soft);margin:2px 0 5px;text-transform:uppercase}
-  .r-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.78rem;padding:3px 0}
-  .r-line .dots{flex:1;border-bottom:1.5px dotted var(--line);transform:translateY(-3px)}
-  .r-line .qty{font-weight:600;color:var(--pink-deep)}
-  .r-line .money{font-weight:600;color:var(--matcha-deep)}
-  .r-note{font-size:.64rem;color:var(--ink-soft);padding-left:2px}
-  .r-empty{text-align:center;color:var(--ink-soft);font-size:.78rem;padding:18px 6px;line-height:1.7}
-  .r-total{display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;letter-spacing:.5px;padding:2px 0}
-  .r-total.grand{font-size:.95rem;color:var(--matcha-deep)}
-  .r-foot{text-align:center;font-size:.68rem;color:var(--ink-soft);margin-top:14px;letter-spacing:1px}
-  .r-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-  .btn{
-    flex:1;border:none;cursor:pointer;border-radius:12px;padding:10px 8px;
-    font:700 .82rem 'Quicksand',sans-serif;letter-spacing:.4px;transition:transform .1s, opacity .15s;
-    min-width:110px;
-  }
-  .btn:active{transform:scale(.96)}
-  .btn:focus-visible{outline:3px solid var(--matcha);outline-offset:2px}
-  .btn-log{background:var(--pink-deep);color:#fff;flex-basis:100%}
-  .btn-log:hover{background:#D55482}
-  .btn-copy{background:var(--matcha);color:#fff}
-  .btn-copy:hover{background:var(--matcha-deep)}
-  .btn-clear{background:var(--pink-wash);color:var(--pink-deep)}
-  .btn-clear:hover{background:var(--pink);color:#fff}
-  .webhook-row{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-  .webhook-row input{
-    border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;
-    font:500 .72rem 'IBM Plex Mono',monospace;color:var(--ink);background:#fff;min-width:0;
-  }
-  .webhook-row input:focus{outline:3px solid #A8B6E8;outline-offset:1px;border-color:#8195DE}
-  .btn-discord{background:#5865F2;color:#fff}
-  .btn-discord:hover{background:#4552D9}
-  .btn-discord:disabled{opacity:.6;cursor:wait}
-  .webhook-hint{font-size:.62rem;color:var(--ink-soft);text-align:center;letter-spacing:.3px}
-
-  /* ---------- MANAGER VIEW ---------- */
-  #managerView{display:none;max-width:1180px;margin:0 auto}
-  body.manager #orderView{display:none}
-  body.manager #managerView{display:block}
-  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:26px}
-  .stat{
-    background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);
-    padding:16px 18px;box-shadow:0 2px 8px rgba(232,106,150,.06);
-  }
-  .stat .label{font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
-  .stat .value{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.7rem;color:var(--pink-deep);line-height:1.2;margin-top:4px}
-  .stat .value.green{color:var(--matcha-deep)}
-  .panel{
-    background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);
-    padding:18px;box-shadow:0 2px 8px rgba(232,106,150,.06);margin-bottom:22px;overflow-x:auto;
-  }
-  .panel h3{font-family:'Baloo 2',cursive;font-weight:700;font-size:1.1rem;margin-bottom:12px}
-  table{width:100%;border-collapse:collapse;font-size:.8rem}
-  th{
-    text-align:left;font-size:.64rem;letter-spacing:1.2px;text-transform:uppercase;
-    color:var(--ink-soft);padding:6px 10px;border-bottom:2px solid var(--line);white-space:nowrap;
-  }
-  th.num, td.num{text-align:right}
-  td{padding:7px 10px;border-bottom:1px solid #FBEEF3;vertical-align:top}
-  tr:last-child td{border-bottom:none}
-  td .money{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--matcha-deep)}
-  .bar{height:8px;border-radius:99px;background:var(--pink-wash);overflow:hidden;min-width:90px}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--pink-deep));border-radius:99px}
-  .items-mini{font-size:.72rem;color:var(--ink-soft);line-height:1.5}
-  .mgr-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
-  .mgr-actions .btn{flex:0 1 auto;padding:10px 18px}
-  .btn-danger{background:#fff;border:1.5px solid var(--pink);color:var(--pink-deep)}
-  .btn-danger:hover{background:var(--pink-wash)}
-  .empty-log{
-    text-align:center;color:var(--ink-soft);font-weight:600;padding:40px 20px;line-height:1.8;
-    background:#fff;border:1.5px dashed var(--line);border-radius:var(--radius);
-  }
-</style>
-</head>
-<body>
-
-<header>
-  <div class="brand">
-    <div class="cat-badge" aria-hidden="true">🐱</div>
-    <div>
-      <h1><span class="uwu">UwU Cafe</span> <span id="pageTitle">Order Calculator</span></h1>
-      <p class="tagline" id="pageTag">pick the order — get the bill and the shopping list · 1 craft makes 5 items ✧</p>
-    </div>
-  </div>
-</header>
-
-<div class="toolbar">
-  <button class="toggle" id="priceToggle" type="button">✎ Edit prices</button>
-  <span class="hint" id="toolbarHint">log each order and the manager page keeps the running totals</span>
-  <span class="spacer"></span>
-  <button class="toggle" id="viewToggle" type="button">📊 Manager overview</button>
-</div>
-
-<!-- ============ ORDER VIEW ============ -->
-<div class="layout" id="orderView">
-  <main id="menu"></main>
-
-  <aside class="receipt-wrap" aria-live="polite">
-    <div class="receipt">
-      <h2>· Order Ticket ·</h2>
-      <p class="sub">UWU CAFE — PREP &amp; BILL</p>
-      <div class="field-row">
-        <label for="serverName">server:</label>
-        <input id="serverName" type="text" maxlength="40" placeholder="who took the order?" autocomplete="off">
-      </div>
-      <div class="field-row">
-        <label for="customerName">customer:</label>
-        <input id="customerName" type="text" maxlength="60" placeholder="who's it for?" autocomplete="off">
-      </div>
-      <div class="field-row">
-        <label for="tipAmount">tip/extra $:</label>
-        <input id="tipAmount" type="number" min="0" step="1" placeholder="0" inputmode="numeric">
-      </div>
-      <hr class="dashes">
-      <div id="orderLines"></div>
-      <div id="orderTotals"></div>
-      <hr class="dashes">
-      <p class="r-sect">Ingredients needed · 1 craft = 5 items</p>
-      <div id="ingLines"></div>
-      <hr class="dashes">
-      <div class="r-total"><span>TOTAL INGREDIENTS</span><span id="totalCount">0</span></div>
-      <div class="r-actions">
-        <button class="btn btn-log" id="logBtn" type="button">✧ Log order to overview</button>
-        <button class="btn btn-copy" id="copyBtn" type="button">Copy ticket</button>
-        <button class="btn btn-clear" id="clearBtn" type="button">Clear</button>
-      </div>
-      <div class="webhook-row">
-        <input id="webhookUrl" type="url" placeholder="paste Discord webhook URL…" autocomplete="off" spellcheck="false" aria-label="Discord webhook URL">
-        <button class="btn btn-discord" id="discordBtn" type="button">Send ticket to Discord</button>
-        <p class="webhook-hint" id="webhookHint">the URL stays in your browser — it's never saved in this file</p>
-      </div>
-      <p class="r-foot">≽^•⩊•^≼ arigatou for cooking!</p>
-    </div>
-  </aside>
-</div>
-
-<!-- ============ MANAGER VIEW ============ -->
-<div id="managerView">
-  <div class="stat-grid">
-    <div class="stat"><div class="label">Total revenue</div><div class="value green" id="statRevenue">$0</div></div>
-    <div class="stat"><div class="label">Orders logged</div><div class="value" id="statOrders">0</div></div>
-    <div class="stat"><div class="label">Items sold</div><div class="value" id="statItems">0</div></div>
-    <div class="stat"><div class="label">Top seller</div><div class="value" id="statTop" style="font-size:1.2rem">—</div></div>
-  </div>
-
-  <div class="mgr-actions">
-    <button class="btn btn-copy" id="csvBtn" type="button">⬇ Export CSV (for the sheet)</button>
-    <button class="btn btn-danger" id="wipeBtn" type="button">Clear all logged orders</button>
-  </div>
-
-  <div class="panel">
-    <h3>💁 By employee</h3>
-    <table>
-      <thead><tr><th>Employee</th><th class="num">Orders</th><th class="num">Revenue</th><th>Share</th></tr></thead>
-      <tbody id="empRows"></tbody>
-    </table>
-  </div>
-
-  <div class="panel">
-    <h3>🍰 Items sold</h3>
-    <table>
-      <thead><tr><th>Item</th><th class="num">Qty sold</th><th class="num">Revenue</th><th>Share</th></tr></thead>
-      <tbody id="itemRows"></tbody>
-    </table>
-  </div>
-
-  <div class="panel">
-    <h3>🧾 Order log</h3>
-    <table>
-      <thead><tr><th>Date</th><th>Customer</th><th>Employee</th><th>Items</th><th class="num">Amount</th></tr></thead>
-      <tbody id="logRows"></tbody>
-    </table>
-  </div>
-
-  <div class="empty-log" id="emptyLog" style="display:none">
-    no orders logged yet… (˶˃ ᵕ ˂˶)<br>take an order and hit "✧ Log order to overview"
-  </div>
-</div>
-
+/* UwU Cafe — Midnight Sakura / Neon Pink edition */
+:root{--milk:#10070d;--paper:#1b0d16;--ink:#ffe5ee;--soft:#cf9daf;--pink:#ff9fc6;--deep:#ff549e;--wash:#351323;--green:#ffa5cd;--line:#71324d;--radius:17px}
+html{color-scheme:dark;scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 10% 0%,#532038 0,transparent 30%),radial-gradient(ellipse at 95% 16%,#41132f 0,transparent 35%),radial-gradient(ellipse at 55% 95%,#2c1022 0,transparent 50%),#0d060b;color:var(--ink);min-height:100vh}
+body:before{content:'✿      ✿   ❀       ✿';pointer-events:none;position:absolute;top:0;left:0;right:0;height:165px;white-space:pre;text-align:center;font-size:72px;letter-spacing:1.2rem;color:#e95e9b48;text-shadow:0 0 28px #ff80b280;overflow:hidden;z-index:0}
+header,.toolbar,.layout,#managerView{position:relative;z-index:1}
+header{padding:22px 24px 20px;border:1px solid #a84574;border-radius:20px;background:linear-gradient(135deg,#280f1de8,#11070fef);box-shadow:inset 0 0 30px #ff46941a,0 8px 35px #0009,0 0 18px #ff4d9626}
+.brand{gap:18px}.cat-badge{background:#f999c5;color:#210b15;border:3px solid #ff4da1;box-shadow:0 0 0 5px #2f0b22,0 0 22px #ff4e97b0;width:65px;height:65px}
+h1{color:#ffe8f1;letter-spacing:.5px;text-shadow:0 0 16px #ff4e9755}h1 .uwu{color:#ff82b6;text-shadow:0 0 14px #ff4a97a8}
+.tagline{color:#eeb2ca}.toolbar{margin-top:17px;margin-bottom:22px}.hint{color:#cfa0b5}
+.toggle{background:#230d19;border:1px solid #a94774;color:#ffabd1;box-shadow:inset 0 0 9px #ff67a411}.toggle:hover,.toggle.on{background:#f64c98;border-color:#ff8cbe;color:#190710;box-shadow:0 0 18px #fa4b9070}
+.cat-head{padding-bottom:4px}.cat-head h2{color:#ffc1dc;text-shadow:0 0 12px #ff4b9580;font-size:1.4rem;letter-spacing:.4px}.cat-emoji{filter:drop-shadow(0 0 7px #ff6197)}.rule{background:linear-gradient(90deg,#ff5eaa80,transparent)}
+.card,.stat,.panel{background:linear-gradient(145deg,#2d1423,#1a0c17 75%);border:1px solid #783452;box-shadow:inset 0 0 0 1px #ff9cba0c,0 5px 15px #0008}
+.card{transition:transform .16s,box-shadow .16s,border-color .16s}.card:hover{transform:translateY(-2px);border-color:#d6548d;box-shadow:0 5px 24px #fd3f8b25}.card.active{border:1.5px solid #ff75b1;box-shadow:0 0 0 1px #ff76b133,0 0 22px #f6489360;background:linear-gradient(145deg,#41162d,#200b1b)}.card h3{color:#fff1f7}.price-tag{color:#ffb9d7;background:#4c1933;border:1px solid #a44170}.ing{color:#cb92ab}
+.stepper button{background:#571d39;color:#ffb0d0;border:1px solid #a04470}.stepper button:hover{background:#ff569b;color:#220815}.stepper input,.price-edit input,.webhook-row input{background:#160a12;border:1px solid #83415f;color:#ffe0ef}.price-edit{color:#ffafcf}.price-edit input{border-color:#d95b93}
+.receipt{background:linear-gradient(165deg,#301426,#160a13);border:1.5px solid #d65591;border-radius:16px;padding:23px 20px 28px;box-shadow:0 0 24px #f3458e3b,0 10px 28px #0009}
+.receipt:after{display:none}.receipt h2{font-family:'Baloo 2',cursive;color:#ffc7df;font-size:1.3rem;text-shadow:0 0 12px #ff5fa57f}.sub{color:#ff9abf}.dashes{border-top-color:#83425d}.field-row label,.r-sect{color:#d59db4}.field-row input{color:#ffc1d9;border-bottom-color:#79405b}.field-row input::placeholder{color:#a46f87}.r-line{color:#ffe4ee}.money,.grand{color:#ffa6ce}.qty{color:#ff81b5}.r-empty{color:#d09cb0}.dots{border-color:#9f5472}.r-total.grand{font-size:1.07rem;text-shadow:0 0 9px #fc469c66}.webhook-hint,.r-foot{color:#b9869e}
+.btn{transition:filter .15s,transform .15s}.btn:hover{filter:brightness(1.13);transform:translateY(-1px)}.btn-log{background:linear-gradient(90deg,#e93785,#ff79b4);color:#2a0918;box-shadow:0 0 15px #ff4e944c}.btn-copy{background:#a62d68;color:#fff1f8}.btn-clear{background:#47182f;color:#ffc3dd;border:1px solid #a64a78}.btn-discord{background:#5865f2;color:white}.btn-danger{background:#351326;border:1px solid #d85c91;color:#ffaacc}
+.stat .label{color:#dfa5be}.stat .value,.stat .value.green{color:#ff88bc;text-shadow:0 0 12px #ff589a66}.panel h3{color:#ffc0dc}th{color:#efa6c4;border-color:#8a3a5c}td{border-bottom-color:#5e2942}.items-mini{color:#d9a1b8}.bar{background:#4a1c35}.bar i{background:linear-gradient(90deg,#f68bb7,#fd3f91);box-shadow:0 0 8px #ff4997}.empty-log{border-color:#9c4671;color:#dba8bd;background:#1c0d16}
+input:focus-visible,button:focus-visible{outline:2px solid #ff94c7;outline-offset:3px}
+@media(max-width:600px){body{padding:12px 12px 60px}header{padding:16px 14px}.cat-badge{width:53px;height:53px}.menu-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}.card{padding:12px}.layout{gap:15px}.toolbar{gap:8px}}
+</style><style>
+/* Profit dashboard */
+.card .cost-strip{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;margin:9px 0 11px;padding:10px;border:1px solid #79334f;border-radius:11px;background:#12080e;font-size:.75rem}
+.card .cost-strip small{display:block;font-size:.68rem;color:#d6a5bb;margin-bottom:2px}
+.card .cost-strip b{color:#ff9dc9;font-family:'IBM Plex Mono',monospace;font-size:.84rem}
+.card .cost-strip .profit b{color:#9befc1}
+.card .ing{line-height:1.5;min-height:32px}
+.card .ingredient-edit{display:none;align-items:center;gap:6px;color:var(--soft);font-size:.75rem;margin:8px 0}
+body.pricing .ingredient-edit{display:flex}
+.ingredient-edit input{width:90px;max-width:100%;background:#170b13;border:1px solid #9c3c68;border-radius:8px;padding:6px;color:#fff}
+.r-metric{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:.78rem}
+.r-metric span:last-child{font-weight:700;color:#ffa5cd;text-align:right}
+.r-metric.positive span:last-child{color:#9befc1}
+.r-metric.negative span:last-child{color:#ff778b}
+.r-note{font-size:.65rem;color:#bc8fa5;padding:1px 0 6px}
+.r-total.grand{font-size:1.03rem}
+.mini-help{font-size:.7rem;color:var(--soft);margin:6px 0 10px}
+.receipt{border:1px solid #924064;border-radius:14px;box-shadow:0 0 24px #ff34842c}
+.receipt::after{display:none}
+.menu-grid{grid-template-columns:repeat(auto-fill,minmax(245px,1fr))}
+.stat .value{word-break:break-word}
+.panel{border-color:#79334f}
+@media(max-width:560px){.menu-grid{grid-template-columns:1fr}.r-line{font-size:.7rem}}
+</style></head><body>
+<header><div class="brand"><div class="cat-badge">🐱</div><div><h1><span class="uwu">UwU Cafe</span> <span id="pageTitle">Order Calculator</span></h1><p class="tagline" id="pageTag">item costs are per piece · cook up to 10 at a time ✧</p></div></div></header>
+<div class="toolbar"><button class="toggle" id="priceToggle">✎ Edit prices</button><span class="hint">Sale prices, recipe costs & live profit for every item</span><span class="spacer"></span><button class="toggle" id="viewToggle">📊 Manager overview</button></div>
+<div class="layout" id="orderView"><main id="menu"></main><aside class="receipt-wrap"><div class="receipt"><h2>· Order Ticket ·</h2><p class="sub">UWU CAFE — PREP &amp; BILL</p><div class="field-row"><label for="serverName">server:</label><input id="serverName" maxlength="40" placeholder="who took the order?"></div><div class="field-row"><label for="customerName">customer:</label><input id="customerName" maxlength="60" placeholder="who's it for?"></div><div class="field-row"><label for="tipAmount">tip/extra $:</label><input id="tipAmount" type="number" min="0" step="1" placeholder="0"></div><hr class="dashes"><div id="orderLines"></div><div id="orderTotals"></div><hr class="dashes"><p class="r-sect">Ingredients for this order (per item)</p><div id="ingredientLines"></div><div class="r-actions"><button class="btn btn-log" id="logBtn">✧ Log order to overview</button><button class="btn btn-copy" id="copyBtn">Copy ticket</button><button class="btn btn-clear" id="clearBtn">Clear</button></div><div class="webhook-row"><input id="webhookUrl" type="url" placeholder="paste Discord webhook URL…" autocomplete="off" spellcheck="false" aria-label="Discord webhook URL"><button class="btn btn-discord" id="discordBtn">Send ticket to Discord</button><p class="webhook-hint" id="webhookHint">Webhook URL is stored only in this browser, not sent anywhere except Discord.</p></div><p class="r-foot">≽^•⩊•^≼ thank you for visiting!</p></div></aside></div>
+<div id="managerView"><div class="stat-grid"><div class="stat"><div class="label">Total revenue</div><div class="value green" id="statRevenue">$0</div></div><div class="stat"><div class="label">Ingredient costs</div><div class="value" id="statCosts">$0</div></div><div class="stat"><div class="label">Total profit</div><div class="value green" id="statProfit">$0</div></div><div class="stat"><div class="label">Profit margin</div><div class="value" id="statMargin">0%</div></div><div class="stat"><div class="label">Orders logged</div><div class="value" id="statOrders">0</div></div><div class="stat"><div class="label">Items sold</div><div class="value" id="statItems">0</div></div><div class="stat"><div class="label">Top seller</div><div class="value" id="statTop" style="font-size:1.2rem">—</div></div></div><div class="mgr-actions"><button class="btn btn-copy" id="csvBtn">⬇ Export CSV</button><button class="btn btn-danger" id="wipeBtn">Clear all logged orders</button></div><div class="panel"><h3>💁 By employee</h3><table><thead><tr><th>Employee</th><th class="num">Orders</th><th class="num">Revenue</th><th class="num">Costs</th><th class="num">Profit</th><th class="num">Margin</th></tr></thead><tbody id="empRows"></tbody></table></div><div class="panel"><h3>🍰 Items sold</h3><table><thead><tr><th>Item</th><th class="num">Qty sold</th><th class="num">Revenue</th><th class="num">Costs</th><th class="num">Profit</th><th class="num">Margin</th></tr></thead><tbody id="itemRows"></tbody></table></div><div class="panel"><h3>🧾 Order log</h3><table><thead><tr><th>Date</th><th>Customer</th><th>Employee</th><th>Items</th><th class="num">Revenue</th><th class="num">Costs</th><th class="num">Profit</th></tr></thead><tbody id="logRows"></tbody></table></div><div id="emptyLog" class="empty-log" style="display:none">No orders logged yet… (˶˃ ᵕ ˂˶)</div></div>
 <script>
-const YIELD = 5;
-
-const MENU = {
-  "Drinks 🧋": {
-    "Matcha Coffee":        { price:100, ings:["matcha powder","milk","brewed coffee"] },
-    "Lovely Hot Chocolate": { price:100, ings:["sugar","cocoa powder","milk","cup"] },
-    "Hot Chocolate":        { price:100, ings:["sugar","cocoa powder","milk","cup"] },
-    "Booba Milk Tea":       { price:100, ings:["dried boba tapioca pearls","sugar","milk","juice","ice"] },
-    "Sweet Herbal Tea":     { price:100, ings:["lemon","sugar","mint","ice","cup"] }
-  },
-  "Mains 🍛": {
-    "Kira Kira Curry":    { price:100, ings:["onion","rice","chicken thighs","plate"] },
-    "Sugoi Katsu Sando":  { price:100, ings:["pullman bread","chicken breast","egg","flour","butter","plate"] },
-    "Om-Nom Omurice":     { price:100, ings:["onion","chicken thighs","virgin olive oil","rice","soy sauce","plate"] },
-    "Rice Balls":         { price:100, ings:["rice","sea moss"] },
-    "Doki Doki Pancakes": { price:100, ings:["flour","milk","egg"] }
-  },
-  "Sweets 🍪": {
-    "Brown Macaroon":       { price:100, ings:["flour","egg","sugar","brown dye"] },
-    "Pink Macaroon":        { price:100, ings:["flour","egg","sugar","pink dye"] },
-    "Green Macaroon":       { price:100, ings:["flour","egg","sugar","green dye"] },
-    "Turquoise Macaroon":   { price:100, ings:["flour","egg","sugar","turquoise dye"] },
-    "Awwdorable Chocolate": { price:100, ings:["sugar","cocoa powder","milk"] },
-    "GingerKitty Cookie":   { price:100, ings:["egg","lemon","baking powder"] }
-  },
-  "Desserts 🍰": {
-    "Blueberry Cupcake":       { price:100, ings:["baking powder","egg","sugar","butter","flour"] },
-    "Dragon's Fire Cupcake":   { price:100, ings:["milk","egg","butter"] },
-    "Purrfect Parfait":        { price:100, ings:["milk","strawberry","butter","egg"] },
-    "Meowchi Mochi Ice Cream": { price:100, ings:["rice flour","sugar"] },
-    "Birthday Cake":           { price:100, ings:["sugar","flour","egg","milk","plate"] },
-    "Strawberry Shortcake":    { price:100, ings:["flour","baking powder","strawberry","sugar","butter","plate"] }
-  },
-  "Specials 🎁": {
-    "Purrfect Feast / Pawsitively Breakfast": { price:300,   ings:[] },
-    "Mystery Box":                            { price:5000,  ings:[] },
-    "Chef's Meal (Date Night)":               { price:6000,  ings:[] },
-    "Plushie":                                { price:20000, ings:[] }
-  }
-};
-
-const qty = {}, price = {}, ITEMS = {};
-for (const items of Object.values(MENU))
-  for (const [item, def] of Object.entries(items)) { qty[item]=0; price[item]=def.price; ITEMS[item]=def; }
-const ITEM_ORDER = Object.keys(ITEMS);
-
-const money = n => "$" + n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
-const isSpecial = item => ITEMS[item].ings.length === 0;
-const craftsFor = item => isSpecial(item) ? 0 : Math.ceil(qty[item] / YIELD);
-const store = {
-  get(k, fb){ try { const v = localStorage.getItem(k); return v === null ? fb : JSON.parse(v); } catch { return fb; } },
-  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
-};
-let orders = store.get('uwuOrders', []);
-
-/* ---------- build menu ---------- */
-const menuEl = document.getElementById('menu');
-for (const [cat, items] of Object.entries(MENU)) {
-  const parts = cat.split(' '); const emoji = parts.pop(); const name = parts.join(' ');
-  const section = document.createElement('section');
-  section.className = 'cat-section';
-  section.innerHTML = `
-    <div class="cat-head"><span class="cat-emoji" aria-hidden="true">${emoji}</span><h2>${name}</h2><span class="rule"></span></div>
-    <div class="menu-grid"></div>`;
-  const grid = section.querySelector('.menu-grid');
-
-  for (const [item, def] of Object.entries(items)) {
-    const card = document.createElement('div');
-    card.className = 'card' + (def.ings.length ? '' : ' special');
-    card.dataset.item = item;
-    card.innerHTML = `
-      <div class="top">
-        <h3>${item}</h3>
-        <span class="price-tag" data-tag>${money(def.price)}</span>
-        <span class="price-edit">$<input type="number" min="0" step="0.01" value="${def.price}" aria-label="price of ${item}"></span>
-      </div>
-      <p class="ing">${def.ings.length ? def.ings.join(' · ') : 'special item — no crafting needed'}</p>
-      <div class="stepper">
-        <button type="button" data-d="-1" aria-label="one less ${item}">−</button>
-        <input type="number" min="0" max="999" value="0" inputmode="numeric" aria-label="quantity of ${item}">
-        <button type="button" data-d="1" aria-label="one more ${item}">+</button>
-      </div>`;
-    grid.appendChild(card);
-
-    const qInput = card.querySelector('.stepper input');
-    card.querySelectorAll('.stepper button').forEach(b =>
-      b.addEventListener('click', () => setQty(item, qty[item] + Number(b.dataset.d), card, qInput))
-    );
-    qInput.addEventListener('input', () => setQty(item, parseInt(qInput.value,10) || 0, card, qInput, true));
-
-    const pInput = card.querySelector('.price-edit input');
-    const tag = card.querySelector('[data-tag]');
-    pInput.addEventListener('input', () => {
-      const v = parseFloat(pInput.value);
-      price[item] = isNaN(v) ? 0 : Math.max(0, v);
-      tag.textContent = money(price[item]);
-      render();
-    });
-  }
-  menuEl.appendChild(section);
+'use strict';
+const DATA = {"Bubble Tea 🧋":{"Cola Bubble Tea":{"sale":50,"cost":3.2,"ingredients":{"Milk":1,"Boba":1,"eCola":1}},"Green Bubble Tea":{"sale":50,"cost":3.9,"ingredients":{"Milk":1,"Boba":1,"Kiwi":1}},"Strawberry Bubble Tea":{"sale":50,"cost":4.0,"ingredients":{"Strawberry":1,"Boba":1,"Milk":1}},"Caramel Bubble Tea":{"sale":50,"cost":4.0,"ingredients":{"Milk":1,"Boba":1,"Caramel":1}},"Milky Bubble Tea":{"sale":50,"cost":3.5,"ingredients":{"Milk":1,"Sugar":1,"Boba":1}}},"Mochi 🍡":{"Blue Mochi":{"sale":30,"cost":4.8,"ingredients":{"Milk":1,"Sugar":1,"Blueberry":1,"Flour":1}},"Green Mochi":{"sale":30,"cost":4.4,"ingredients":{"Milk":1,"Sugar":1,"Mint":1,"Flour":1}},"Orange Mochi":{"sale":30,"cost":4.8,"ingredients":{"Orange":1,"Sugar":1,"Milk":1,"Flour":1}},"Pink Mochi":{"sale":30,"cost":5.0,"ingredients":{"Strawberry":1,"Sugar":1,"Milk":1,"Flour":1}}},"Cake & Donuts 🍩":{"Strawberry Cake":{"sale":50,"cost":9.2,"ingredients":{"Strawberry":2,"Milk":2,"Egg":2,"Flour":1}},"Strawberry Donut":{"sale":30,"cost":6.6,"ingredients":{"Strawberry":2,"Milk":1,"Egg":1,"Flour":1}},"Chocolate Donut":{"sale":30,"cost":9.0,"ingredients":{"Milk":1,"Egg":1,"Chocolate":2,"Flour":1}},"Blueberry Donut":{"sale":30,"cost":6.2,"ingredients":{"Milk":1,"Egg":1,"Blueberry":2,"Flour":1}}},"Main Course 🍜":{"UwU Pizza":{"sale":100,"cost":8.1,"ingredients":{"Egg":2,"Tomato Paste":1,"Cheese":2,"Milk":1,"Flour":1}},"Vegetable Ramen":{"sale":80,"cost":6.2,"ingredients":{"Egg":1,"Nori":1,"Onion":1,"Noodle":1,"Water":1}},"Ramen":{"sale":80,"cost":3.5,"ingredients":{"Egg":1,"Water":1,"Noodle":1}},"Tuna Sushi":{"sale":70,"cost":4.9,"ingredients":{"Nori":1,"Rice":1,"Tuna":1}},"Avocado Sushi":{"sale":70,"cost":3.9,"ingredients":{"Avocado":1,"Nori":1,"Rice":1}},"Miso Soup":{"sale":60,"cost":7.7,"ingredients":{"Water":1,"Nori":1,"Onion":1,"Tofu":1}}},"Coffee ☕":{"Cappuccino":{"sale":70,"cost":3.7,"ingredients":{"Milk":1,"Water":1,"Raw Coffee":1}},"Mocha":{"sale":70,"cost":4.8,"ingredients":{"Milk":1,"Water":1,"Sugar":1,"Raw Coffee":1}},"Latte":{"sale":70,"cost":3.7,"ingredients":{"Milk":1,"Water":1,"Raw Coffee":1}},"Latte Macchiato":{"sale":70,"cost":5.2,"ingredients":{"Milk":2,"Water":1,"Raw Coffee":1}},"Coffee":{"sale":70,"cost":2.2,"ingredients":{"Raw Coffee":1,"Water":1}}},"Juices 🧃":{"Carrot Juice":{"sale":30,"cost":4.5,"ingredients":{"Carrot":2,"Sugar":1,"Water":1}},"Tomato Juice":{"sale":30,"cost":5.5,"ingredients":{"Sugar":1,"Water":1,"Tomato":2}},"Watermelon Juice":{"sale":30,"cost":5.7,"ingredients":{"Sugar":1,"Water":1,"Watermelon":2}},"Orange Juice":{"sale":30,"cost":5.1,"ingredients":{"Orange":2,"Sugar":1,"Water":1}},"Cranberry Juice":{"sale":30,"cost":4.7,"ingredients":{"Cranberry":2,"Sugar":1,"Water":1}},"Pineapple Juice":{"sale":30,"cost":5.1,"ingredients":{"Sugar":1,"Pineapple":2,"Water":1}},"Lemonade Juice":{"sale":30,"cost":6.1,"ingredients":{"Sugar":1,"Lemon":2,"Water":1}}}};
+const YIELD_MAX = 10; // This is only a maximum batch capacity. Each recipe price makes ONE finished item.
+const ITEM_ORDER = Object.values(DATA).flatMap(section => Object.keys(section));
+const DEF = Object.assign({},...Object.values(DATA));
+const qty={},sale={},cost={};
+for(const name of ITEM_ORDER){qty[name]=0;sale[name]=DEF[name].sale;cost[name]=DEF[name].cost}
+const $=id=>document.getElementById(id);
+const money=n=>'$'+(Math.round((Number(n)||0)*100)/100).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct=n=>Number.isFinite(n)?n.toFixed(1)+'%':'—';
+const round=n=>Math.round((Number(n)||0)*100)/100;
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,fb){try{const x=localStorage.getItem(k);return x===null?fb:JSON.parse(x)}catch{return fb}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+let orders=store.get('uwuCafePosterOrders',[]);if(!Array.isArray(orders))orders=[];
+function ingredientsString(ings){return Object.entries(ings).map(([i,n])=>i+(n>1?' ×'+n:'')).join(' · ')}
+function profit(n){return round(sale[n]-cost[n])}
+function margin(n){return sale[n]>0?100*(sale[n]-cost[n])/sale[n]:0}
+function updateCard(name){const card=[...document.querySelectorAll('.card')].find(c=>c.dataset.item===name);if(!card)return;card.querySelector('.price-tag').textContent=money(sale[name]);card.querySelector('[data-cost]').textContent=money(cost[name]);card.querySelector('[data-profit]').textContent=money(profit(name));card.querySelector('[data-margin]').textContent=pct(margin(name));card.querySelector('[data-profit]').style.color=profit(name)<0?'#ff778b':'#9befc1'}
+for(const [cat,items] of Object.entries(DATA)){
+ const heading=document.createElement('section');heading.className='cat-section';const last=cat.lastIndexOf(' ');
+ heading.innerHTML='<div class="cat-head"><span>'+cat.slice(last+1)+'</span><h2>'+escapeHTML(cat.slice(0,last))+'</h2><span class="rule"></span></div>';
+ const grid=document.createElement('div');grid.className='menu-grid';
+ for(const [name,def] of Object.entries(items)){
+  const card=document.createElement('div');card.className='card';card.dataset.item=name;
+  card.innerHTML=`<div class="top"><h3>${escapeHTML(name)}</h3><span class="price-tag">${money(def.sale)}</span><span class="price-edit">$ <input type="number" min="0" step="0.01" value="${def.sale}" aria-label="Sale price of ${escapeHTML(name)}"></span></div><p class="ing">${escapeHTML(ingredientsString(def.ingredients))}</p><div class="cost-strip"><div><small>Make cost / item</small><b data-cost>${money(def.cost)}</b></div><div class="profit"><small>Profit / item</small><b data-profit>${money(profit(name))}</b></div><div><small>Sale price</small><b data-sale>${money(def.sale)}</b></div><div><small>Profit margin</small><b data-margin>${pct(margin(name))}</b></div></div><div class="ingredient-edit"><label>Cost per item $</label><input type="number" min="0" step="0.01" value="${def.cost}" aria-label="Make cost of ${escapeHTML(name)}"></div><div class="stepper"><button type="button" data-d="-1" aria-label="one less ${escapeHTML(name)}">−</button><input type="number" min="0" max="999" value="0" aria-label="quantity of ${escapeHTML(name)}"><button type="button" data-d="1" aria-label="one more ${escapeHTML(name)}">+</button></div>`;
+  grid.appendChild(card);
+  const qi=card.querySelector('.stepper input');for(const btn of card.querySelectorAll('.stepper button'))btn.addEventListener('click',()=>setQty(name,qty[name]+Number(btn.dataset.d),card,qi));
+  qi.addEventListener('input',()=>setQty(name,parseInt(qi.value,10)||0,card,qi,true));
+  card.querySelector('.price-edit input').addEventListener('input',e=>{sale[name]=Math.max(0,Number(e.target.value)||0);card.querySelector('[data-sale]').textContent=money(sale[name]);updateCard(name);render()});
+  card.querySelector('.ingredient-edit input').addEventListener('input',e=>{cost[name]=Math.max(0,Number(e.target.value)||0);updateCard(name);render()});
+ }
+ heading.appendChild(grid);$('menu').appendChild(heading);
 }
-
-/* ---------- toggles ---------- */
-document.getElementById('priceToggle').addEventListener('click', e => {
-  document.body.classList.toggle('pricing');
-  e.currentTarget.classList.toggle('on');
-  e.currentTarget.textContent = document.body.classList.contains('pricing') ? "✓ Done editing prices" : "✎ Edit prices";
-});
-
-const viewToggle = document.getElementById('viewToggle');
-viewToggle.addEventListener('click', () => {
-  const mgr = document.body.classList.toggle('manager');
-  viewToggle.classList.toggle('on', mgr);
-  viewToggle.textContent = mgr ? "📋 Take orders" : "📊 Manager overview";
-  document.getElementById('pageTitle').textContent = mgr ? "Manager Overview" : "Order Calculator";
-  document.getElementById('pageTag').textContent = mgr
-    ? "running totals from every order logged on this device ✧"
-    : "pick the order — get the bill and the shopping list · 1 craft makes 5 items ✧";
-  if (mgr) renderManager();
-});
-
-/* ---------- ticket ---------- */
-function setQty(item, n, card, input, fromTyping=false) {
-  n = Math.max(0, Math.min(999, n));
-  qty[item] = n;
-  if (!fromTyping) input.value = n;
-  card.classList.toggle('active', n > 0);
-  render();
+$('priceToggle').addEventListener('click',e=>{let on=document.body.classList.toggle('pricing');e.currentTarget.classList.toggle('on',on);e.currentTarget.textContent=on?'✓ Done editing prices / costs':'✎ Edit prices & costs'});
+$('viewToggle').addEventListener('click',e=>{let on=document.body.classList.toggle('manager');e.currentTarget.classList.toggle('on',on);e.currentTarget.textContent=on?'📋 Take orders':'📊 Manager overview';$('pageTitle').textContent=on?'Manager Overview':'Order Calculator';$('pageTag').textContent=on?'revenue, ingredient costs, net sales profit & margin ✧':'each make-cost is for ONE item · up to 10 can be crafted in a batch ✧';if(on)renderManager()});
+function setQty(name,n,card,input,typing=false){n=Math.min(999,Math.max(0,Math.floor(n)||0));qty[name]=n;if(!typing)input.value=n;card.classList.toggle('active',n>0);render()}
+const selected=()=>ITEM_ORDER.filter(i=>qty[i]>0);
+const tipValue=()=>Math.max(0,Number($('tipAmount').value)||0);
+const subtotal=()=>round(selected().reduce((s,i)=>s+sale[i]*qty[i],0));
+const totalCost=()=>round(selected().reduce((s,i)=>s+cost[i]*qty[i],0));
+const totalRevenue=()=>round(subtotal()+tipValue());
+const totalProfit=()=>round(totalRevenue()-totalCost());
+function ingredientTotals(){const t={};for(const i of selected())for(const [ing,n] of Object.entries(DEF[i].ingredients))t[ing]=(t[ing]||0)+n*qty[i];return t}
+function render(){const items=selected(),tip=tipValue();
+ if(!items.length&&!tip){$('orderLines').innerHTML='<div class="r-empty">nothing on the ticket yet… add some menu items! ♡</div>'; $('orderTotals').innerHTML='';$('ingredientLines').innerHTML='<div class="r-empty">—</div>';return}
+ $('orderLines').innerHTML='<p class="r-sect">Order</p>'+items.map(i=>`<div class="r-line"><span>${escapeHTML(i)} <span class="qty">×${qty[i]}</span></span><span class="dots"></span><span class="money">${money(sale[i]*qty[i])}</span></div><div class="r-note">Cost ${money(cost[i]*qty[i])} · profit ${money((sale[i]-cost[i])*qty[i])} · ${pct(margin(i))} margin · ${Math.ceil(qty[i]/YIELD_MAX)} batch${qty[i]>10?'es':''} of up to 10</div>`).join('')+(tip?`<div class="r-line"><span>tip / extra</span><span class="dots"></span><span class="money">${money(tip)}</span></div>`:'');
+ const marginTotal=totalRevenue()>0?100*totalProfit()/totalRevenue():0;
+ $('orderTotals').innerHTML=`<hr class="dashes"><div class="r-metric"><span>Food & drink sales</span><span>${money(subtotal())}</span></div><div class="r-metric"><span>Ingredient costs</span><span>${money(totalCost())}</span></div>${tip?`<div class="r-metric"><span>Tip / extra</span><span>${money(tip)}</span></div>`:''}<hr class="dashes"><div class="r-total grand"><span>CUSTOMER TOTAL</span><span>${money(totalRevenue())}</span></div><div class="r-metric ${totalProfit()<0?'negative':'positive'}"><span>GROSS PROFIT</span><span>${money(totalProfit())}</span></div><div class="r-metric"><span>PROFIT MARGIN</span><span>${pct(marginTotal)}</span></div><p class="mini-help">Make costs are per finished item, not per batch. Margin = profit ÷ sales (including tip when present). Excludes staff wages, rent and other expenses.</p>`;
+ const entries=Object.entries(ingredientTotals()).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+ $('ingredientLines').innerHTML=entries.length?entries.map(([name,n])=>`<div class="r-line"><span>${escapeHTML(name)}</span><span class="dots"></span><span class="qty">×${n}</span></div>`).join('')+'<p class="mini-help">Quantities across all selected items. Craft up to 10 at once without changing per-item costs.</p>':'<div class="r-empty">—</div>';
 }
-function ingredientTotals() {
-  const t = {};
-  for (const [item, def] of Object.entries(ITEMS))
-    if (qty[item] > 0)
-      for (const ing of def.ings) t[ing] = (t[ing] || 0) + craftsFor(item);
-  return t;
+$('tipAmount').addEventListener('input',render);
+function clearTicket(){for(const c of document.querySelectorAll('.card')){qty[c.dataset.item]=0;c.querySelector('.stepper input').value=0;c.classList.remove('active')}$('customerName').value='';$('tipAmount').value='';render()}
+$('clearBtn').addEventListener('click',clearTicket);
+function flash(b,txt,old){b.textContent=txt;setTimeout(()=>b.textContent=old,1500)}
+$('logBtn').addEventListener('click',e=>{const items=selected();if(!items.length&&!tipValue()){flash(e.currentTarget,'nothing to log!','✧ Log order to overview');return}const rec={ts:Date.now(),date:new Date().toLocaleString(),customer:$('customerName').value.trim()||'—',employee:$('serverName').value.trim()||'—',tip:tipValue(),total:totalRevenue(),cost:totalCost(),profit:totalProfit(),items:Object.fromEntries(items.map(i=>[i,qty[i]])),itemRevenue:Object.fromEntries(items.map(i=>[i,round(sale[i]*qty[i])])),itemCosts:Object.fromEntries(items.map(i=>[i,round(cost[i]*qty[i])] ))};orders.push(rec);store.set('uwuCafePosterOrders',orders);flash(e.currentTarget,'Logged! ✧','✧ Log order to overview');clearTicket()});
+function ticket(){const items=selected();if(!items.length&&!tipValue())return null;return{customer:$('customerName').value.trim(),server:$('serverName').value.trim(),lines:items.map(i=>`${i} ×${qty[i]} · sales ${money(sale[i]*qty[i])} · ingredient cost ${money(cost[i]*qty[i])} · profit ${money((sale[i]-cost[i])*qty[i])}`).join('\n'),ingredients:Object.entries(ingredientTotals()).map(([i,n])=>i+' ×'+n).join('\n'),total:totalRevenue(),cost:totalCost(),profit:totalProfit(),tip:tipValue()}}
+$('copyBtn').addEventListener('click',async e=>{const t=ticket();if(!t)return;const msg=`UWU CAFE${t.customer?' for '+t.customer:''}${t.server?' — served by '+t.server:''}\n${t.lines}\nTip: ${money(t.tip)}\nCustomer total: ${money(t.total)}\nIngredient cost: ${money(t.cost)}\nGross profit: ${money(t.profit)}\n\nIngredients needed:\n${t.ingredients}`;try{await navigator.clipboard.writeText(msg);flash(e.currentTarget,'Copied! ✧','Copy ticket')}catch{flash(e.currentTarget,'Copy failed','Copy ticket')}});
+const webhookInput=$('webhookUrl'),discordBtn=$('discordBtn'),webhookHint=$('webhookHint');try{webhookInput.value=localStorage.getItem('uwuWebhook')||''}catch{}webhookInput.addEventListener('change',()=>{try{localStorage.setItem('uwuWebhook',webhookInput.value.trim())}catch{}});
+discordBtn.addEventListener('click',async()=>{const url=webhookInput.value.trim();if(!/^https:\/\/(discord\.com|discordapp\.com|ptb\.discord\.com|canary\.discord\.com)\/api\/webhooks\/[0-9]+\/[\w-]+(?:\?.*)?$/.test(url)){webhookHint.textContent='Enter a valid Discord webhook URL';return}const t=ticket();if(!t){webhookHint.textContent='Add some items to the ticket first';return}const embed={title:'🐱 UwU Cafe — Order Ticket'+(t.customer?' · '+t.customer:''),color:0xff549e,description:'```\n'+t.lines.replace(/```/g,"---").slice(0,3500)+'\n```',fields:[{name:'Customer total',value:money(t.total),inline:true},{name:'Ingredient costs',value:money(t.cost),inline:true},{name:'Gross profit',value:money(t.profit),inline:true},{name:'Ingredients',value:'```\n'+(t.ingredients||'None').slice(0,960)+'\n```'}],footer:{text:(t.server?'served by '+t.server+' · ':'')+'≽^•⩊•^≼'},timestamp:new Date().toISOString()};discordBtn.disabled=true;discordBtn.textContent='Sending…';try{const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'UwU Cafe',embeds:[embed]})});discordBtn.textContent=res.ok?'Sent! ✧':'Failed';webhookHint.textContent=res.ok?'Ticket sent to Discord':'Discord returned '+res.status}catch{discordBtn.textContent='Failed';webhookHint.textContent='Could not send — check browser/network permissions'}setTimeout(()=>{discordBtn.textContent='Send ticket to Discord';discordBtn.disabled=false},2000)});
+function renderManager(){const has=orders.length>0;$('emptyLog').style.display=has?'none':'block';document.querySelectorAll('#managerView .panel').forEach(p=>p.style.display=has?'block':'none');const byEmp={},byItem={};let revenue=0,cogs=0,units=0;for(const o of orders){const r=Number(o.total)||0;const c=Number(o.cost)||0;revenue+=r;cogs+=c;const employee=o.employee||'—';byEmp[employee]??={orders:0,revenue:0,cost:0};byEmp[employee].orders++;byEmp[employee].revenue+=r;byEmp[employee].cost+=c;for(const [name,n0]of Object.entries(o.items||{})){const n=Number(n0)||0;units+=n;byItem[name]??={qty:0,revenue:0,cost:0};byItem[name].qty+=n;byItem[name].revenue+=Number(o.itemRevenue?.[name]??n*(sale[name]||0));byItem[name].cost+=Number(o.itemCosts?.[name]??0)}}
+ const p=revenue-cogs;$('statRevenue').textContent=money(revenue);$('statCosts').textContent=money(cogs);$('statProfit').textContent=money(p);$('statMargin').textContent=revenue>0?pct(100*p/revenue):'0%';$('statOrders').textContent=orders.length;$('statItems').textContent=units.toLocaleString();const items=Object.entries(byItem).sort((a,b)=>b[1].qty-a[1].qty);$('statTop').textContent=items.length?`${items[0][0]} ×${items[0][1].qty}`:'—';
+ const vals=o=>`<td class="num"><span class="money">${money(o.revenue)}</span></td><td class="num">${money(o.cost)}</td><td class="num">${money(o.revenue-o.cost)}</td><td class="num">${o.revenue?pct(100*(o.revenue-o.cost)/o.revenue):'—'}</td>`;
+ $('empRows').innerHTML=Object.entries(byEmp).sort((a,b)=>b[1].revenue-a[1].revenue).map(([name,v])=>`<tr><td>${escapeHTML(name)}</td><td class="num">${v.orders}</td>${vals(v)}</tr>`).join('');
+ $('itemRows').innerHTML=items.map(([name,v])=>`<tr><td>${escapeHTML(name)}</td><td class="num">${v.qty}</td>${vals(v)}</tr>`).join('');
+ $('logRows').innerHTML=[...orders].reverse().map(o=>`<tr><td>${escapeHTML(o.date||'')}</td><td>${escapeHTML(o.customer||'—')}</td><td>${escapeHTML(o.employee||'—')}</td><td class="items-mini">${Object.entries(o.items||{}).map(([i,n])=>escapeHTML(i)+' ×'+Number(n)).join(', ')}${o.tip?', tip '+money(o.tip):''}</td><td class="num">${money(o.total)}</td><td class="num">${o.cost===undefined?'—':money(o.cost)}</td><td class="num">${o.cost===undefined?'—':money(Number(o.total)-Number(o.cost))}</td></tr>`).join('');
 }
-function orderedItems(){ return ITEM_ORDER.filter(i => qty[i] > 0); }
-function tipValue(){ const v = parseFloat(document.getElementById('tipAmount').value); return isNaN(v) ? 0 : Math.max(0, v); }
-function grandTotal(){ return orderedItems().reduce((s,i) => s + price[i]*qty[i], 0) + tipValue(); }
-
-function render() {
-  const items = orderedItems();
-  const orderEl = document.getElementById('orderLines');
-  const totalsEl = document.getElementById('orderTotals');
-  const tip = tipValue();
-
-  if (!items.length && !tip) {
-    orderEl.innerHTML = `<div class="r-empty">nothing on the ticket yet…<br>add some menu items! (˶˃ ᵕ ˂˶)</div>`;
-    totalsEl.innerHTML = "";
-  } else {
-    orderEl.innerHTML = `<p class="r-sect">Order</p>` + items.map(item => {
-      const sub = price[item] * qty[item];
-      let note = "";
-      if (!isSpecial(item)) {
-        const c = craftsFor(item);
-        const spare = c * YIELD - qty[item];
-        note = `<div class="r-note">${c} craft${c>1?"s":""}${spare?` · ${spare} spare`:""}</div>`;
-      }
-      return `<div class="r-line"><span>${item} <span class="qty">×${qty[item]}</span></span><span class="dots"></span><span class="money">${money(sub)}</span></div>${note}`;
-    }).join('') +
-    (tip ? `<div class="r-line"><span>tip / extra</span><span class="dots"></span><span class="money">${money(tip)}</span></div>` : "");
-    totalsEl.innerHTML = `<hr class="dashes"><div class="r-total grand"><span>ORDER TOTAL</span><span>${money(grandTotal())}</span></div>`;
-  }
-
-  const t = ingredientTotals();
-  const entries = Object.entries(t).sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0]));
-  document.getElementById('ingLines').innerHTML = entries.length
-    ? entries.map(([ing,n]) => `<div class="r-line"><span>${ing}</span><span class="dots"></span><span class="qty">×${n}</span></div>`).join('')
-    : `<div class="r-empty" style="padding:8px">—</div>`;
-  document.getElementById('totalCount').textContent = entries.reduce((s,[,n]) => s+n, 0);
-}
-document.getElementById('tipAmount').addEventListener('input', render);
-
-function clearTicket() {
-  document.querySelectorAll('#orderView .card').forEach(card => {
-    const item = card.dataset.item;
-    qty[item] = 0;
-    card.querySelector('.stepper input').value = 0;
-    card.classList.remove('active');
-  });
-  document.getElementById('customerName').value = "";
-  document.getElementById('tipAmount').value = "";
-  render();
-}
-document.getElementById('clearBtn').addEventListener('click', clearTicket);
-
-/* ---------- log order ---------- */
-document.getElementById('logBtn').addEventListener('click', e => {
-  const items = orderedItems();
-  const tip = tipValue();
-  if (!items.length && !tip) { e.target.textContent = "nothing to log!"; setTimeout(()=>e.target.textContent="✧ Log order to overview",1400); return; }
-  const rec = {
-    ts: Date.now(),
-    date: new Date().toLocaleDateString(),
-    customer: document.getElementById('customerName').value.trim() || "—",
-    employee: document.getElementById('serverName').value.trim() || "—",
-    tip,
-    total: grandTotal(),
-    items: Object.fromEntries(items.map(i => [i, qty[i]]))
-  };
-  orders.push(rec);
-  store.set('uwuOrders', orders);
-  e.target.textContent = "Logged! ✧";
-  setTimeout(() => e.target.textContent = "✧ Log order to overview", 1400);
-  clearTicket();
-});
-
-/* ---------- copy & discord ---------- */
-function buildTicketText() {
-  const items = orderedItems();
-  const tip = tipValue();
-  if (!items.length && !tip) return null;
-  const orderTxt = items.map(item => {
-    const sub = price[item] * qty[item];
-    const c = craftsFor(item);
-    const tail = c ? ` (${c} craft${c>1?"s":""})` : "";
-    return `${item} x${qty[item]}${tail}  ${money(sub)}`;
-  }).join("\n") + (tip ? `${items.length?"\n":""}tip/extra  ${money(tip)}` : "");
-  const ings = Object.entries(ingredientTotals()).sort((a,b)=>b[1]-a[1]).map(([i,n]) => `${i} x${n}`).join("\n");
-  return {
-    orderTxt, ings, total: grandTotal(),
-    server: document.getElementById('serverName').value.trim(),
-    customer: document.getElementById('customerName').value.trim()
-  };
-}
-document.getElementById('copyBtn').addEventListener('click', async e => {
-  const t = buildTicketText();
-  if (!t) return;
-  const head = `UwU Cafe order${t.customer ? ` for ${t.customer}` : ""}${t.server ? ` — taken by ${t.server}` : ""}:`;
-  const text = `${head}\n${t.orderTxt}\nORDER TOTAL: ${money(t.total)}` +
-    (t.ings ? `\n\nIngredients needed (1 craft = 5 items):\n${t.ings}` : "");
-  try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied! ✧"; }
-  catch { e.target.textContent = "Copy failed"; }
-  setTimeout(() => e.target.textContent = "Copy ticket", 1500);
-});
-
-const webhookInput = document.getElementById('webhookUrl');
-const discordBtn = document.getElementById('discordBtn');
-const webhookHint = document.getElementById('webhookHint');
-try { const saved = localStorage.getItem('uwuWebhook'); if (saved) webhookInput.value = saved; } catch {}
-webhookInput.addEventListener('change', () => { try { localStorage.setItem('uwuWebhook', webhookInput.value.trim()); } catch {} });
-
-discordBtn.addEventListener('click', async () => {
-  const url = webhookInput.value.trim();
-  const ok = /^https:\/\/(discord\.com|discordapp\.com|ptb\.discord\.com|canary\.discord\.com)\/api\/webhooks\//.test(url);
-  if (!ok) { webhookHint.textContent = "that doesn't look like a Discord webhook URL"; return; }
-  const t = buildTicketText();
-  if (!t) { webhookHint.textContent = "add some items to the ticket first"; return; }
-  const embed = {
-    title: "🐱 UwU Cafe — Order Ticket" + (t.customer ? ` · ${t.customer}` : ""),
-    color: 0xE86A96,
-    description: "```\n" + t.orderTxt + "\n```",
-    fields: [{ name: "Order total", value: "**" + money(t.total) + "**", inline: true }],
-    footer: { text: (t.server ? "taken by " + t.server + " · " : "") + "≽^•⩊•^≼" },
-    timestamp: new Date().toISOString()
-  };
-  if (t.ings) embed.fields.push({ name: "Ingredients needed (1 craft = 5)", value: "```\n" + t.ings + "\n```", inline: false });
-  discordBtn.disabled = true; discordBtn.textContent = "Sending…";
-  try {
-    const res = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ username:"UwU Cafe Ticket", embeds:[embed] }) });
-    if (res.ok) { discordBtn.textContent = "Sent! ✧"; webhookHint.textContent = "ticket delivered to your Discord channel"; }
-    else { discordBtn.textContent = "Failed"; webhookHint.textContent = "Discord said no (" + res.status + ") — check the webhook URL"; }
-  } catch { discordBtn.textContent = "Failed"; webhookHint.textContent = "couldn't reach Discord — check your connection"; }
-  setTimeout(() => { discordBtn.textContent = "Send ticket to Discord"; discordBtn.disabled = false; }, 2000);
-});
-
-/* ---------- manager view ---------- */
-function renderManager() {
-  const hasOrders = orders.length > 0;
-  document.getElementById('emptyLog').style.display = hasOrders ? "none" : "block";
-  document.querySelectorAll('#managerView .panel').forEach(p => p.style.display = hasOrders ? "block" : "none");
-
-  let revenue = 0, itemCount = 0;
-  const byEmp = {}, byItem = {};
-  for (const o of orders) {
-    revenue += o.total;
-    const emp = (o.employee || "—").trim() || "—";
-    byEmp[emp] = byEmp[emp] || { orders:0, revenue:0 };
-    byEmp[emp].orders++; byEmp[emp].revenue += o.total;
-    for (const [item, n] of Object.entries(o.items || {})) {
-      itemCount += n;
-      byItem[item] = byItem[item] || { qty:0, revenue:0 };
-      byItem[item].qty += n;
-      byItem[item].revenue += n * (price[item] ?? 0);
-    }
-  }
-  document.getElementById('statRevenue').textContent = money(revenue);
-  document.getElementById('statOrders').textContent = orders.length;
-  document.getElementById('statItems').textContent = itemCount.toLocaleString();
-  const topItem = Object.entries(byItem).sort((a,b)=>b[1].qty-a[1].qty)[0];
-  document.getElementById('statTop').textContent = topItem ? `${topItem[0]} ×${topItem[1].qty}` : "—";
-
-  const empEntries = Object.entries(byEmp).sort((a,b)=>b[1].revenue-a[1].revenue);
-  const maxEmpRev = Math.max(1, ...empEntries.map(([,v])=>v.revenue));
-  document.getElementById('empRows').innerHTML = empEntries.map(([emp,v]) => `
-    <tr><td>${esc(emp)}</td><td class="num">${v.orders}</td><td class="num"><span class="money">${money(v.revenue)}</span></td>
-    <td><div class="bar"><i style="width:${(v.revenue/maxEmpRev*100).toFixed(1)}%"></i></div></td></tr>`).join('');
-
-  const itemEntries = Object.entries(byItem).sort((a,b)=>b[1].qty-a[1].qty);
-  const maxQty = Math.max(1, ...itemEntries.map(([,v])=>v.qty));
-  document.getElementById('itemRows').innerHTML = itemEntries.map(([item,v]) => `
-    <tr><td>${esc(item)}</td><td class="num">${v.qty}</td><td class="num"><span class="money">${money(v.revenue)}</span></td>
-    <td><div class="bar"><i style="width:${(v.qty/maxQty*100).toFixed(1)}%"></i></div></td></tr>`).join('');
-
-  document.getElementById('logRows').innerHTML = [...orders].reverse().map(o => `
-    <tr><td>${esc(o.date)}</td><td>${esc(o.customer)}</td><td>${esc(o.employee)}</td>
-    <td class="items-mini">${Object.entries(o.items||{}).map(([i,n])=>`${esc(i)} ×${n}`).join(", ") || "—"}${o.tip?`${Object.keys(o.items||{}).length?", ":""}tip ${money(o.tip)}`:""}</td>
-    <td class="num"><span class="money">${money(o.total)}</span></td></tr>`).join('');
-}
-function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-document.getElementById('csvBtn').addEventListener('click', () => {
-  if (!orders.length) return;
-  const q = s => `"${String(s).replace(/"/g,'""')}"`;
-  const header = ["Date","Customer","Employee","Amount","Tip",...ITEM_ORDER].map(q).join(",");
-  const rows = orders.map(o =>
-    [o.date, o.customer, o.employee, o.total, o.tip || 0, ...ITEM_ORDER.map(i => o.items?.[i] || "")].map(q).join(",")
-  );
-  const blob = new Blob([header + "\n" + rows.join("\n")], { type: "text/csv" });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = "uwu-cafe-orders.csv";
-  a.click();
-  URL.revokeObjectURL(a.href);
-});
-
-document.getElementById('wipeBtn').addEventListener('click', () => {
-  if (!orders.length) return;
-  if (confirm("Clear ALL logged orders on this device? This can't be undone — export the CSV first if you need it!")) {
-    orders = [];
-    store.set('uwuOrders', orders);
-    renderManager();
-  }
-});
-
+$('csvBtn').addEventListener('click',()=>{if(!orders.length)return;const quote=s=>'"'+String(s??'').replace(/"/g,'""')+'"';const headers=['Date','Customer','Employee','Revenue','Ingredient costs','Gross profit','Margin %','Tip',...ITEM_ORDER];const rows=[headers,...orders.map(o=>[o.date,o.customer,o.employee,o.total,o.cost??'',o.cost===undefined?'':round(Number(o.total)-Number(o.cost)),o.cost===undefined?'':(o.total?round(100*(Number(o.total)-Number(o.cost))/Number(o.total)):0),o.tip||0,...ITEM_ORDER.map(i=>o.items?.[i]||'')])];const blob=new Blob(['\ufeff'+rows.map(row=>row.map(quote).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='uwu-cafe-profit-orders.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)});
+$('wipeBtn').addEventListener('click',()=>{if(orders.length&&confirm('Clear ALL logged orders on this device? Export CSV first if needed.')){orders=[];store.set('uwuCafePosterOrders',orders);renderManager()}});
 render();
-</script>
-</body>
-</html>
+</script></body></html>
